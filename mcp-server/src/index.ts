@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { startHttpServer } from './http.js';
 import crypto from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import os from 'node:os';
@@ -33,10 +34,23 @@ let browserContext: BrowserContext | null = null;
 let page: Page | null = null;
 let currentUrl = DEFAULT_APP_URL;
 
-const server = new McpServer({
-  name: 'appscreen-mcp',
-  version: '1.0.2',
-});
+const SERVER_VERSION = '1.0.2';
+
+/**
+ * Tool registrations are collected instead of being bound to one McpServer, because the
+ * Streamable HTTP transport needs a fresh McpServer per session (an McpServer can only be
+ * connected to a single transport at a time).
+ */
+const toolRegistrations: Array<(server: McpServer) => void> = [];
+
+function createMcpServer() {
+  const server = new McpServer({
+    name: 'appscreen-mcp',
+    version: SERVER_VERSION,
+  });
+  for (const register of toolRegistrations) register(server);
+  return server;
+}
 
 function text(data: unknown) {
   return {
@@ -205,13 +219,15 @@ function registerTool<T extends z.ZodRawShape>(
     }
   };
 
-  server.registerTool(
-    name,
-    {
-      description,
-      inputSchema: schema,
-    } as any,
-    callback as any,
+  toolRegistrations.push((server) =>
+    server.registerTool(
+      name,
+      {
+        description,
+        inputSchema: schema,
+      } as any,
+      callback as any,
+    ),
   );
 }
 
@@ -733,5 +749,15 @@ process.on('SIGTERM', async () => {
   process.exit(0);
 });
 
-const transport = new StdioServerTransport();
-await server.connect(transport);
+const useHttp =
+  process.argv.includes('--http') || (process.env.MCP_TRANSPORT ?? 'stdio').toLowerCase() === 'http';
+
+if (useHttp) {
+  await startHttpServer({
+    createServer: createMcpServer,
+    version: SERVER_VERSION,
+    browserReady: () => Boolean(browserContext && page && !page.isClosed()),
+  });
+} else {
+  await createMcpServer().connect(new StdioServerTransport());
+}

@@ -67,6 +67,20 @@ APPSCREEN_URL=https://appsolves.github.io/appscreen-mcp/ npm start
 | `APPSCREEN_BROWSER_TIMEOUT_MS` | No | `60000` | Timeout in milliseconds for browser navigation, bridge initialization, and Playwright operations. Increase this if the hosted app or large screenshot sets load slowly. |
 | `APPSCREEN_BROWSER_PROFILE_DIR` | No | `~/AppScreenMCP/browser-profile` | Persistent Chromium profile directory used by Playwright. This preserves browser storage such as IndexedDB between MCP runs. Use a stable absolute path if you want AppScreen projects to persist after closing the browser. |
 
+### Transport variables
+
+Only relevant when running the server over HTTP instead of stdio. See [Self-hosting](#self-hosting).
+
+| Variable | Required | Default | Description |
+|---|---:|---|---|
+| `MCP_TRANSPORT` | No | `stdio` | Set to `http` to serve the Streamable HTTP transport instead of stdio. The `--http` CLI flag does the same thing. |
+| `PORT` | No | `3000` | Port for the HTTP transport. |
+| `MCP_AUTH_TOKEN` | **Yes for HTTP** | _unset_ | Bearer token required on every `/mcp` request. If unset, the server prints a warning and binds to `127.0.0.1` only, so it is unreachable from other machines. |
+| `MCP_BIND` | No | `0.0.0.0` with a token, `127.0.0.1` without | Interface to bind. Only set this to override the safe default, and only behind a trusted network or reverse proxy. |
+| `MCP_ALLOWED_ORIGINS` | No | _empty_ | Comma-separated list of browser origins allowed to call `/mcp`. Empty means any request carrying an `Origin` header is rejected, which blocks DNS-rebinding attacks. Normal MCP clients do not send `Origin`, so you almost never need this. |
+| `MCP_MAX_BODY_BYTES` | No | `67108864` (64 MB) | Maximum request body on an established session. Tool calls carry base64 screenshots and a set can hold ten in one request, so raise this if you upload unusually large images. Oversize requests get a `413`. |
+| `MCP_SESSION_IDLE_MS` | No | `1800000` (30 min) | How long an idle session is kept before its slot is reclaimed. Clients that disconnect without sending `DELETE /mcp` would otherwise hold a slot until restart. |
+
 ### Recommended defaults
 
 For most users, only `APPSCREEN_URL` and optionally `APPSCREEN_HEADLESS` are needed:
@@ -311,6 +325,102 @@ Then create a production screenshot set:
 - capture an editor preview
 - return the output file paths
 ```
+
+## Self-hosting
+
+By default the MCP server talks **stdio** and is launched by your MCP client as a child process. For a self-hosted deployment you can instead run it as a long-lived HTTP service that any MCP client can connect to over the network, with the AppScreen frontend running next to it in the same stack. Nothing then depends on the hosted GitHub Pages site.
+
+### One command with docker compose
+
+The compose stack runs two containers: `appscreen-mcp` (the nginx frontend, port 8080) and `appscreen-mcp-server` (this MCP server on the Streamable HTTP transport, port 3000). The MCP server drives the frontend container over the internal compose network, so no traffic leaves your host.
+
+From the repository root:
+
+```bash
+# 1. Generate an auth token. Treat it like a password.
+echo "MCP_AUTH_TOKEN=$(openssl rand -hex 32)" >> .env
+
+# 2. Start the stack (builds both images on first run).
+docker compose up -d
+
+# 3. Check it is alive.
+curl http://localhost:3000/health
+# {"ok":true,"version":"1.0.2","browserReady":false}
+```
+
+`docker compose config` fails fast if `MCP_AUTH_TOKEN` is missing. This is deliberate: an unauthenticated MCP endpoint lets anyone who can reach it drive a browser, read local files through the `filePath` tool arguments, and use your App Store Connect credentials.
+
+`docker-compose.build.yml` is the same stack with the frontend built from source rather than pulled from ghcr.
+
+### Connecting an MCP client over HTTP
+
+The endpoint is `POST/GET/DELETE http://<host>:3000/mcp` and every request must carry the bearer token:
+
+```
+Authorization: Bearer <MCP_AUTH_TOKEN>
+```
+
+Claude Code:
+
+```bash
+claude mcp add --transport http appscreen https://appscreen.example.com/mcp \
+  --header "Authorization: Bearer $MCP_AUTH_TOKEN"
+```
+
+Clients using a JSON config file:
+
+```json
+{
+  "mcpServers": {
+    "appscreen": {
+      "type": "http",
+      "url": "https://appscreen.example.com/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_TOKEN_HERE"
+      }
+    }
+  }
+}
+```
+
+Raw check with curl:
+
+```bash
+curl -sS -X POST http://localhost:3000/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -H "Authorization: Bearer $MCP_AUTH_TOKEN" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"curl","version":"0"}}}' -D -
+```
+
+The response carries an `mcp-session-id` header; send it back on every subsequent request alongside the `Authorization` header.
+
+### Running the HTTP transport without Docker
+
+```bash
+cd mcp-server
+npm run build
+MCP_TRANSPORT=http PORT=3000 MCP_AUTH_TOKEN=$(openssl rand -hex 32) npm start
+```
+
+### Health endpoint
+
+`GET /health` is intentionally unauthenticated so load balancers and orchestrators can probe it. It returns no secrets:
+
+```json
+{ "ok": true, "version": "1.0.2", "browserReady": true }
+```
+
+`browserReady` is `false` until the first tool call launches Chromium.
+
+### Security notes
+
+- **Always set `MCP_AUTH_TOKEN`.** Generate one with `openssl rand -hex 32`. Without it the server refuses to listen on anything except loopback, which means the published container port simply will not answer.
+- **TLS is the reverse proxy's job.** This server speaks plain HTTP. Put nginx, Caddy, Traefik, or your platform's ingress (Dokploy, for example) in front of it and terminate HTTPS there. A bearer token sent over plain HTTP across an untrusted network is a token you have given away.
+- **Rotate the token** by changing `.env` and running `docker compose up -d`; existing sessions die with the container.
+- **The stack is single-tenant.** All MCP sessions drive the one shared browser page, so two clients working at the same time will interfere with each other's project state. Run one stack per user.
+- **Concurrent sessions are capped at 32**, and idle ones are reclaimed after `MCP_SESSION_IDLE_MS`. Request bodies over `MCP_MAX_BODY_BYTES` are rejected with `413`. Both limits exist so a client that disappears or floods the endpoint cannot exhaust memory or wedge the server.
+- Requests carrying a browser `Origin` header are rejected unless listed in `MCP_ALLOWED_ORIGINS`, which blocks DNS-rebinding attacks against a loopback-bound server.
 
 ## How it works
 

@@ -10,6 +10,11 @@
 # Node
 node_modules/
 
+# Secrets — docker compose reads MCP_AUTH_TOKEN from here
+.env
+.env.*
+!.env.example
+
 # Build output
 dist/
 out/

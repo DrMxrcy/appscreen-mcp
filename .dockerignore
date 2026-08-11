@@ -35,3 +35,7 @@ docker-compose.build.yml
 # Build artifacts
 *.log
 *.tmp
+
+# Secrets — never bake into an image layer
+.env
+.env.*

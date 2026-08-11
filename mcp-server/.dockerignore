@@ -1,0 +1,12 @@
+node_modules/
+dist/
+README.md
+LICENSE
+Dockerfile
+.dockerignore
+*.log
+.DS_Store
+
+# Secrets — never bake into an image layer
+.env
+.env.*

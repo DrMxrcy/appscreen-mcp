@@ -13,9 +13,55 @@ services:
           "--no-verbose",
           "--tries=1",
           "--spider",
-          "http://localhost/health",
+          "http://127.0.0.1/health",
         ]
       interval: 30s
       timeout: 3s
       retries: 3
       start_period: 5s
+
+  # MCP server (Streamable HTTP). Built locally from ./mcp-server because no image is
+  # published yet; once one is, `docker compose pull` will pick it up instead.
+  appscreen-mcp-server:
+    build:
+      context: ./mcp-server
+      dockerfile: Dockerfile
+    image: appscreen-mcp-server:latest
+    container_name: appscreen-mcp-server
+    depends_on:
+      appscreen-mcp:
+        condition: service_healthy
+    environment:
+      MCP_TRANSPORT: http
+      PORT: "3000"
+      # Required. Generate one with: openssl rand -hex 32
+      # Without it the server refuses to listen on anything but loopback, so the
+      # published port below would be unreachable.
+      MCP_AUTH_TOKEN: ${MCP_AUTH_TOKEN:?Set MCP_AUTH_TOKEN (openssl rand -hex 32) in .env before starting the MCP server}
+      # Drive the frontend container over the compose network, not the hosted site.
+      APPSCREEN_URL: http://appscreen-mcp/
+      APPSCREEN_HEADLESS: "true"
+    ports:
+      - "3000:3000"
+    # Chromium needs more than Docker's default 64MB /dev/shm or it crashes on render.
+    shm_size: 1gb
+    volumes:
+      - appscreen-outputs:/home/pwuser/AppScreenMCP/outputs
+      - appscreen-profile:/home/pwuser/AppScreenMCP/browser-profile
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  appscreen-outputs:
+  appscreen-profile:

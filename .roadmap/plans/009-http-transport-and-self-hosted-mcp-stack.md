@@ -3,7 +3,7 @@ id: 9
 title: HTTP transport and self-hosted MCP stack
 type: feature
 version: 1.2.0
-status: planned
+status: done
 created: 2026-08-11
 ---
 
@@ -21,6 +21,6 @@ created: 2026-08-11
 - **Downstream impact:** Playwright inside container needs chromium deps in image; health check endpoint
 
 ## 🚶 Step-by-Step Checklist
-- [ ] Step 1: Add Streamable HTTP transport + bearer auth behind flag/env (stdio remains default) -> target: mcp-server/src/index.ts
-- [ ] Step 2: Containerize MCP server with Playwright deps; compose service wired to frontend container via APP_URL -> target: Dockerfile / docker-compose.yml
-- [ ] Step 3: Verify: `docker compose up`, connect MCP client over HTTP with token, run full generate+export flow -> target: end-to-end smoke
+- [x] Step 1: Add Streamable HTTP transport + bearer auth behind flag/env (stdio remains default) -> target: mcp-server/src/index.ts
+- [x] Step 2: Containerize MCP server with Playwright deps; compose service wired to frontend container via APP_URL -> target: Dockerfile / docker-compose.yml
+- [x] Step 3: Verify: `docker compose up`, connect MCP client over HTTP with token, run full generate+export flow -> target: end-to-end smoke
