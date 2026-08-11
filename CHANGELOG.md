@@ -10,7 +10,7 @@
 ## v1.1.0 — (in progress)
 
 ### ✨ New
-- (pending) Type exact hex color codes anywhere you pick a color
+- Type exact hex color codes anywhere you pick a color
 - (pending) Export screenshots as JPG or PNG, whichever your workflow needs
 - (pending) Align headlines and subheadlines left, center, or right
 

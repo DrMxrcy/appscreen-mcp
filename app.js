@@ -1542,12 +1542,113 @@ function initSync() {
     setupEventListeners();
     setupElementEventListeners();
     setupPopoutEventListeners();
+    setupColorHexInputs();
     setupSliderResetButtons();
     initFontPicker();
     updateGradientStopsUI();
     updateCanvas();
     // Then load saved data asynchronously
     window.__APPSCREEN_INIT_PROMISE = init();
+}
+
+function normalizeHexColor(value, allowShort = true) {
+    const trimmed = value.trim();
+    const withHash = trimmed.startsWith('#') ? trimmed : `#${trimmed}`;
+
+    if (allowShort && /^#[0-9a-fA-F]{3}$/.test(withHash)) {
+        return '#' + withHash.slice(1).split('').map(char => char + char).join('').toLowerCase();
+    }
+    if (/^#[0-9a-fA-F]{6}$/.test(withHash)) {
+        return withHash.toLowerCase();
+    }
+    return null;
+}
+
+function enhanceColorInput(colorInput) {
+    if (!colorInput || colorInput.dataset.hexEnhanced === 'true') return;
+
+    let hexInput = colorInput.nextElementSibling;
+    if (!hexInput || hexInput.type !== 'text') {
+        hexInput = document.createElement('input');
+        hexInput.type = 'text';
+        colorInput.insertAdjacentElement('afterend', hexInput);
+    }
+
+    if (!hexInput.hasAttribute('aria-label')) {
+        hexInput.setAttribute('aria-label', `${colorInput.title || 'Color'} hex value`);
+    }
+    hexInput.setAttribute('spellcheck', 'false');
+    hexInput.setAttribute('autocomplete', 'off');
+    hexInput.maxLength = 7;
+    hexInput.placeholder = '#RRGGBB';
+    hexInput.classList.add('color-hex-input');
+    if (colorInput.parentElement?.classList.contains('text-style-bar')) {
+        hexInput.classList.add('compact');
+    }
+
+    colorInput.dataset.hexEnhanced = 'true';
+    hexInput.value = colorInput.value.toLowerCase();
+
+    const setInvalidState = (invalid) => {
+        hexInput.classList.toggle('invalid', invalid);
+        hexInput.setAttribute('aria-invalid', invalid ? 'true' : 'false');
+    };
+    setInvalidState(false);
+
+    colorInput.addEventListener('input', () => {
+        hexInput.value = colorInput.value.toLowerCase();
+        setInvalidState(false);
+    });
+
+    const applyHexValue = (allowShort = true, showInvalid = true) => {
+        const normalized = normalizeHexColor(hexInput.value, allowShort);
+        if (!normalized) {
+            if (showInvalid) setInvalidState(true);
+            return false;
+        }
+
+        hexInput.value = normalized;
+        setInvalidState(false);
+        if (colorInput.value !== normalized) {
+            colorInput.value = normalized;
+            colorInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        return true;
+    };
+
+    hexInput.addEventListener('input', () => {
+        if (!applyHexValue(false, false)) {
+            setInvalidState(!/^#?[0-9a-fA-F]{0,6}$/.test(hexInput.value.trim()));
+        }
+    });
+    hexInput.addEventListener('change', () => applyHexValue());
+    hexInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && applyHexValue()) {
+            hexInput.blur();
+        }
+    });
+    hexInput.addEventListener('blur', () => {
+        if (!applyHexValue()) {
+            hexInput.value = colorInput.value.toLowerCase();
+            setInvalidState(false);
+        }
+    });
+}
+
+function setupColorHexInputs(root = document) {
+    root.querySelectorAll('input[type="color"]').forEach(enhanceColorInput);
+}
+
+function syncColorHexInputs(root = document) {
+    setupColorHexInputs(root);
+    root.querySelectorAll('input[type="color"]').forEach(colorInput => {
+        const hexInput = colorInput.nextElementSibling;
+        if (hexInput?.classList.contains('color-hex-input') && document.activeElement !== hexInput) {
+            hexInput.value = colorInput.value.toLowerCase();
+            hexInput.classList.remove('invalid');
+            hexInput.setAttribute('aria-invalid', 'false');
+        }
+    });
 }
 
 // Save state to IndexedDB for current project
@@ -2446,6 +2547,7 @@ function syncUIWithState() {
     selectedPopoutId = null;
     updatePopoutsList();
     updatePopoutProperties();
+    syncColorHexInputs();
 }
 
 // ===== Elements Tab UI =====
@@ -2616,6 +2718,7 @@ function updateElementProperties() {
         document.getElementById('element-icon-shadow-y').value = shadow.y;
         document.getElementById('element-icon-shadow-y-value').textContent = shadow.y + 'px';
     }
+    syncColorHexInputs(propsEl);
 }
 
 function setupElementEventListeners() {
@@ -2668,18 +2771,6 @@ function setupElementEventListeners() {
                 el.iconColor = iconColor.value;
                 if (iconColorHex) iconColorHex.value = iconColor.value;
                 updateIconImage(el);
-            }
-        });
-    }
-    if (iconColorHex) {
-        iconColorHex.addEventListener('change', () => {
-            if (/^#[0-9a-fA-F]{6}$/.test(iconColorHex.value)) {
-                const el = getSelectedElement();
-                if (el && el.type === 'icon') {
-                    el.iconColor = iconColorHex.value;
-                    if (iconColor) iconColor.value = iconColorHex.value;
-                    updateIconImage(el);
-                }
             }
         });
     }
@@ -2740,18 +2831,6 @@ function setupElementEventListeners() {
                 el.iconShadow.color = iconShadowColor.value;
                 if (iconShadowColorHex) iconShadowColorHex.value = iconShadowColor.value;
                 updateCanvas();
-            }
-        });
-    }
-    if (iconShadowColorHex) {
-        iconShadowColorHex.addEventListener('change', () => {
-            if (/^#[0-9a-fA-F]{6}$/.test(iconShadowColorHex.value)) {
-                const el = getSelectedElement();
-                if (el?.type === 'icon' && el.iconShadow) {
-                    el.iconShadow.color = iconShadowColorHex.value;
-                    if (iconShadowColor) iconShadowColor.value = iconShadowColorHex.value;
-                    updateCanvas();
-                }
             }
         });
     }
@@ -2849,14 +2928,6 @@ function setupElementEventListeners() {
             if (selectedElementId) {
                 setElementProperty(selectedElementId, 'frameColor', frameColor.value);
                 if (frameColorHex) frameColorHex.value = frameColor.value;
-            }
-        });
-    }
-    if (frameColorHex) {
-        frameColorHex.addEventListener('change', () => {
-            if (selectedElementId && /^#[0-9a-fA-F]{6}$/.test(frameColorHex.value)) {
-                setElementProperty(selectedElementId, 'frameColor', frameColorHex.value);
-                if (frameColor) frameColor.value = frameColorHex.value;
             }
         });
     }
@@ -3339,6 +3410,7 @@ function updatePopoutProperties() {
 
     // Update crop preview
     updateCropPreview();
+    syncColorHexInputs(propsEl);
 }
 
 // Compute image-fit layout within the crop preview canvas (letterboxed)
@@ -3659,14 +3731,6 @@ function setupPopoutEventListeners() {
             if (p) { p.shadow.color = shadowColor.value; if (shadowColorHex) shadowColorHex.value = shadowColor.value; updateCanvas(); }
         });
     }
-    if (shadowColorHex) {
-        shadowColorHex.addEventListener('change', () => {
-            if (/^#[0-9a-fA-F]{6}$/.test(shadowColorHex.value)) {
-                const p = getSelectedPopout();
-                if (p) { p.shadow.color = shadowColorHex.value; if (shadowColor) shadowColor.value = shadowColorHex.value; updateCanvas(); }
-            }
-        });
-    }
 
     // Border toggle
     const borderToggle = document.getElementById('popout-border-toggle');
@@ -3703,14 +3767,6 @@ function setupPopoutEventListeners() {
         borderColor.addEventListener('input', () => {
             const p = getSelectedPopout();
             if (p) { p.border.color = borderColor.value; if (borderColorHex) borderColorHex.value = borderColor.value; updateCanvas(); }
-        });
-    }
-    if (borderColorHex) {
-        borderColorHex.addEventListener('change', () => {
-            if (/^#[0-9a-fA-F]{6}$/.test(borderColorHex.value)) {
-                const p = getSelectedPopout();
-                if (p) { p.border.color = borderColorHex.value; if (borderColor) borderColor.value = borderColorHex.value; updateCanvas(); }
-            }
         });
     }
 
@@ -4378,13 +4434,6 @@ function setupEventListeners() {
         document.getElementById('solid-color-hex').value = e.target.value;
         updateCanvas();
     });
-    document.getElementById('solid-color-hex').addEventListener('input', (e) => {
-        if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) {
-            setBackground('solid', e.target.value);
-            document.getElementById('solid-color').value = e.target.value;
-            updateCanvas();
-        }
-    });
 
     // Background image
     const bgImageUpload = document.getElementById('bg-image-upload');
@@ -4555,13 +4604,6 @@ function setupEventListeners() {
         updateCanvas();
     });
 
-    document.getElementById('frame-color-hex').addEventListener('input', (e) => {
-        if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) {
-            setScreenshotSetting('frame.color', e.target.value);
-            document.getElementById('frame-color').value = e.target.value;
-            updateCanvas();
-        }
-    });
 
     document.getElementById('frame-width').addEventListener('input', (e) => {
         setScreenshotSetting('frame.width', parseInt(e.target.value));
@@ -4760,13 +4802,6 @@ function setupEventListeners() {
         updateCanvas();
     });
 
-    document.getElementById('text-shadow-color-hex').addEventListener('change', (e) => {
-        if (/^#[0-9a-fA-F]{6}$/.test(e.target.value)) {
-            getTextShadow().color = e.target.value;
-            document.getElementById('text-shadow-color').value = e.target.value;
-            updateCanvas();
-        }
-    });
 
     [['blur', 'px'], ['opacity', '%'], ['x', 'px'], ['y', 'px']].forEach(([key, unit]) => {
         document.getElementById('text-shadow-' + key).addEventListener('input', (e) => {
@@ -6924,6 +6959,7 @@ function updateGradientStopsUI() {
         div.className = 'gradient-stop';
         div.innerHTML = `
             <input type="color" value="${stop.color}" data-stop="${index}">
+            <input type="text" class="color-hex-input" value="${stop.color}" aria-label="Gradient stop hex value" spellcheck="false" autocomplete="off" maxlength="7" placeholder="#RRGGBB">
             <input type="number" value="${stop.position}" min="0" max="100" data-stop="${index}">
             <span>%</span>
             ${index > 1 ? `<button class="screenshot-delete" data-stop="${index}">
@@ -6962,6 +6998,7 @@ function updateGradientStopsUI() {
         }
 
         container.appendChild(div);
+        setupColorHexInputs(div);
     });
 }
 

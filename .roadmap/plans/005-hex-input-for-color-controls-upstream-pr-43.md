@@ -3,7 +3,7 @@ id: 5
 title: Hex input for color controls (upstream PR #43)
 type: feature
 version: 1.1.0
-status: planned
+status: done
 created: 2026-08-11
 ---
 
@@ -21,5 +21,5 @@ created: 2026-08-11
 - **Downstream impact:** gradient editor stops need same treatment
 
 ## 🚶 Step-by-Step Checklist
-- [ ] Step 1: Fetch upstream PR #43 diff, adapt to our fork's controls (incl. any we added) -> target: index.html, app.js, styles.css
-- [ ] Step 2: Verify: type hex updates swatch + canvas; pick color updates hex; invalid input rejected gracefully -> target: manual test
+- [x] Step 1: Fetch upstream PR #43 diff, adapt to our fork's controls (incl. any we added) -> target: index.html, app.js, styles.css
+- [x] Step 2: Verify: type hex updates swatch + canvas; pick color updates hex; invalid input rejected gracefully -> target: manual test

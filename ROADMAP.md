@@ -20,8 +20,8 @@
 - [x] **#3 Fix per-language text layout state (upstream PR #11)** `bug` — 100% ([plan](.roadmap/plans/003-fix-per-language-text-layout-state-upstream-pr-11.md))
 - [x] **#4 Flatten alpha channel on PNG export (upstream issue #24)** `bug` — 100% ([plan](.roadmap/plans/004-flatten-alpha-channel-on-png-export-upstream-issue-24.md))
 
-### [ ] v1.1.0 — 0%
-- [ ] **#5 Hex input for color controls (upstream PR #43)** `feature` — 0% ([plan](.roadmap/plans/005-hex-input-for-color-controls-upstream-pr-43.md))
+### [ ] v1.1.0 — 25%
+- [x] **#5 Hex input for color controls (upstream PR #43)** `feature` — 100% ([plan](.roadmap/plans/005-hex-input-for-color-controls-upstream-pr-43.md))
 - [ ] **#6 JPG export with format switching (upstream PR #34)** `feature` — 0% ([plan](.roadmap/plans/006-jpg-export-with-format-switching-upstream-pr-34.md))
 - [ ] **#7 Text alignment options (upstream issue #29)** `feature` — 0% ([plan](.roadmap/plans/007-text-alignment-options-upstream-issue-29.md))
 
