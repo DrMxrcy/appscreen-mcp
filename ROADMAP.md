@@ -1,6 +1,7 @@
 # 🗺️ Roadmap: AppScreen MCP
 
 ## 💡 Idea Incubator
+- Magical titles via Ollama vision models (needs storageKey guard in magical-titles.js + generateTitlesWithOllama)
 - Upstream issue #28: cross-screen screenshot overflow (one design spanning multiple store slots) — big visual differentiator
 <!-- Free-form; sync never rewrites this region. ONE bullet per idea (`roadmap.py idea`).
      Long write-ups (brainstorms, review findings) go to .roadmap/notes/ files and get linked. -->
