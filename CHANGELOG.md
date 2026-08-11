@@ -16,7 +16,7 @@
 - (pending) Translate marketing text with a local AI model, fully offline and free
 
 ### 🐛 Fixed
-- (pending) Projects save reliably even when older data contains unsaveable objects
+- Projects save reliably even when older data contains unsaveable objects
 
 ## v1.1.0 — 2026-08-11
 

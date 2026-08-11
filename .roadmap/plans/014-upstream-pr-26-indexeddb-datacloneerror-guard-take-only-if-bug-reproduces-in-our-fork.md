@@ -3,7 +3,7 @@ id: 14
 title: Upstream PR #26: IndexedDB DataCloneError guard — take only if bug reproduces in our fork
 type: bug
 version: 1.2.0
-status: planned
+status: done
 created: 2026-08-11
 ---
 
@@ -20,5 +20,5 @@ created: 2026-08-11
 - **Why:** saveState serializes live state object.
 
 ## 🛠️ Checklist
-- [ ] Step 1: Attempt repro in our fork (inject Image into element/popout state, save); diff PR #26 for paths we missed -> target: analysis
-- [ ] Step 2: If reproducible, add a structured-clone-safe serializer pass (or targeted strips); else close as already-fixed with evidence -> target: app.js
+- [x] Step 1: Attempt repro in our fork (inject Image into element/popout state, save); diff PR #26 for paths we missed -> target: analysis
+- [x] Step 2: If reproducible, add a structured-clone-safe serializer pass (or targeted strips); else close as already-fixed with evidence -> target: app.js

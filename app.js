@@ -1717,10 +1717,21 @@ function saveState() {
     try {
         const transaction = db.transaction([PROJECTS_STORE], 'readwrite');
         const store = transaction.objectStore(PROJECTS_STORE);
-        store.put(stateToSave);
+        // Last-line guard: strip any non-cloneable runtime object (live images in
+        // popouts, element .img keys, future additions) — a DataCloneError here
+        // would silently kill ALL persistence for the session
+        store.put(sanitizeForStorage(stateToSave));
     } catch (e) {
         console.error('Error saving state:', e);
     }
+}
+
+function sanitizeForStorage(value) {
+    return JSON.parse(JSON.stringify(value, (_key, v) =>
+        (typeof HTMLImageElement !== 'undefined' && v instanceof HTMLImageElement) ||
+        (typeof HTMLCanvasElement !== 'undefined' && v instanceof HTMLCanvasElement)
+            ? undefined : v
+    ));
 }
 
 // Migrate 3D positions from old formula to new formula
