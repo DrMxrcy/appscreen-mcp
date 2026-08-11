@@ -22,3 +22,12 @@ frontend-dist/
 *.AppImage
 *.deb
 *.snap
+
+# AI coding tooling — reinstallable via claude-skills install.sh
+.claude/
+.grok/
+.codex/
+.agents/
+
+# Full internal dev log (public notes stay in CHANGELOG.md)
+CHANGELOG.internal.md

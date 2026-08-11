@@ -1,0 +1,101 @@
+{
+  "project": "AppScreen MCP",
+  "currentVersion": "1.0.0",
+  "nextId": 11,
+  "items": [
+    {
+      "id": 1,
+      "slug": "fix-severe-slowdown-with-5-screenshots-upstream-pr-39",
+      "title": "Fix severe slowdown with 5+ screenshots (upstream PR #39)",
+      "type": "bug",
+      "version": "1.0.1",
+      "file": "plans/001-fix-severe-slowdown-with-5-screenshots-upstream-pr-39.md",
+      "note": "Editing stays fast and responsive even with many screenshots in a project"
+    },
+    {
+      "id": 2,
+      "slug": "fix-image-background-not-persisting-across-multiple-screenshots-upstream-pr-33",
+      "title": "Fix image background not persisting across multiple screenshots (upstream PR #33)",
+      "type": "bug",
+      "version": "1.0.1",
+      "file": "plans/002-fix-image-background-not-persisting-across-multiple-screenshots-upstream-pr-33.md",
+      "note": "Background images now save reliably on every screenshot"
+    },
+    {
+      "id": 3,
+      "slug": "fix-per-language-text-layout-state-upstream-pr-11",
+      "title": "Fix per-language text layout state (upstream PR #11)",
+      "type": "bug",
+      "version": "1.0.1",
+      "file": "plans/003-fix-per-language-text-layout-state-upstream-pr-11.md",
+      "note": "Text position and style no longer get mixed up when switching languages"
+    },
+    {
+      "id": 4,
+      "slug": "flatten-alpha-channel-on-png-export-upstream-issue-24",
+      "title": "Flatten alpha channel on PNG export (upstream issue #24)",
+      "type": "bug",
+      "version": "1.0.1",
+      "file": "plans/004-flatten-alpha-channel-on-png-export-upstream-issue-24.md",
+      "note": "Exported images are always accepted by App Store Connect, no transparency errors"
+    },
+    {
+      "id": 5,
+      "slug": "hex-input-for-color-controls-upstream-pr-43",
+      "title": "Hex input for color controls (upstream PR #43)",
+      "type": "feature",
+      "version": "1.1.0",
+      "file": "plans/005-hex-input-for-color-controls-upstream-pr-43.md",
+      "note": "Type exact hex color codes anywhere you pick a color"
+    },
+    {
+      "id": 6,
+      "slug": "jpg-export-with-format-switching-upstream-pr-34",
+      "title": "JPG export with format switching (upstream PR #34)",
+      "type": "feature",
+      "version": "1.1.0",
+      "file": "plans/006-jpg-export-with-format-switching-upstream-pr-34.md",
+      "note": "Export screenshots as JPG or PNG, whichever your workflow needs"
+    },
+    {
+      "id": 7,
+      "slug": "text-alignment-options-upstream-issue-29",
+      "title": "Text alignment options (upstream issue #29)",
+      "type": "feature",
+      "version": "1.1.0",
+      "file": "plans/007-text-alignment-options-upstream-issue-29.md",
+      "note": "Align headlines and subheadlines left, center, or right"
+    },
+    {
+      "id": 8,
+      "slug": "app-store-connect-direct-upload-mcp-tool-upstream-issue-25",
+      "title": "App Store Connect direct upload MCP tool (upstream issue #25)",
+      "type": "feature",
+      "version": "1.2.0",
+      "file": "plans/008-app-store-connect-direct-upload-mcp-tool-upstream-issue-25.md",
+      "note": "Push finished screenshots straight to App Store Connect without leaving your workflow"
+    },
+    {
+      "id": 9,
+      "slug": "http-transport-and-self-hosted-mcp-stack",
+      "title": "HTTP transport and self-hosted MCP stack",
+      "type": "feature",
+      "version": "1.2.0",
+      "file": "plans/009-http-transport-and-self-hosted-mcp-stack.md",
+      "note": "Run the whole screenshot generator and its automation server on your own infrastructure"
+    },
+    {
+      "id": 10,
+      "slug": "ollama-local-model-support-for-ai-translations-upstream-pr-7",
+      "title": "Ollama local model support for AI translations (upstream PR #7)",
+      "type": "feature",
+      "version": "1.2.0",
+      "file": "plans/010-ollama-local-model-support-for-ai-translations-upstream-pr-7.md",
+      "note": "Translate marketing text with a local AI model, fully offline and free"
+    }
+  ],
+  "settings": {
+    "autoCommit": true,
+    "gitTagOnRelease": false
+  }
+}
