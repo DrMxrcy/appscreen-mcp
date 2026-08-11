@@ -1887,6 +1887,10 @@
                         <input type="radio" name="ai-provider" value="google">
                         <span class="provider-label">Google (Gemini)</span>
                     </label>
+                    <label class="settings-provider-option">
+                        <input type="radio" name="ai-provider" value="ollama">
+                        <span class="provider-label">Ollama (Local)</span>
+                    </label>
                 </div>
             </div>
 
@@ -1988,6 +1992,46 @@
                         <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
                     </svg>
                     Get your API key from Google AI Studio
+                </a>
+            </div>
+
+            <div class="settings-section settings-api-section" id="settings-ollama" data-provider="ollama"
+                style="display: none;">
+                <h4 class="settings-section-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                        <path d="M8 21h8M12 17v4" />
+                    </svg>
+                    Ollama Server
+                </h4>
+                <p class="settings-description">Runs models locally on your machine. No API key required.</p>
+                <div class="settings-input-group">
+                    <input type="text" id="settings-base-url-ollama" placeholder="http://localhost:11434" />
+                </div>
+                <p class="settings-description" style="margin: 8px 0 0 0;">Browser requests need Ollama started with
+                    OLLAMA_ORIGINS set to allow this page (for example OLLAMA_ORIGINS=* ollama serve).</p>
+                <div class="settings-key-status" id="settings-key-status-ollama"></div>
+                <div class="settings-model-group">
+                    <label class="settings-model-label">Model</label>
+                    <div class="settings-input-group">
+                        <select id="settings-model-ollama" class="settings-model-select">
+                            <!-- Populated from the Ollama server -->
+                        </select>
+                        <button class="settings-show-key" id="ollama-refresh-models" title="Refresh model list"
+                            style="flex-shrink: 0;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M23 4v6h-6M1 20v-6h6" />
+                                <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <a href="https://ollama.com/library" target="_blank" class="settings-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
+                    </svg>
+                    Browse models on the Ollama library
                 </a>
             </div>
 

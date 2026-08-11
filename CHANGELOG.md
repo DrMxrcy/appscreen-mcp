@@ -13,7 +13,7 @@
 ### ✨ New
 - Push finished screenshots straight to App Store Connect without leaving your workflow
 - (pending) Run the whole screenshot generator and its automation server on your own infrastructure
-- (pending) Translate marketing text with a local AI model, fully offline and free
+- Translate marketing text with a local AI model, fully offline and free
 
 ### 🐛 Fixed
 - Projects save reliably even when older data contains unsaveable objects

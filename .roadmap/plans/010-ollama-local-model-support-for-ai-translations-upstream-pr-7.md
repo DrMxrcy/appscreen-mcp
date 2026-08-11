@@ -3,7 +3,7 @@ id: 10
 title: Ollama local model support for AI translations (upstream PR #7)
 type: feature
 version: 1.2.0
-status: planned
+status: done
 created: 2026-08-11
 ---
 
@@ -21,6 +21,6 @@ created: 2026-08-11
 - **Downstream impact:** CORS — Ollama needs OLLAMA_ORIGINS set for browser calls; document clearly
 
 ## 🚶 Step-by-Step Checklist
-- [ ] Step 1: Fetch upstream PR #7 diff, adapt provider code to our llm.js structure -> target: llm.js
-- [ ] Step 2: Settings UI: provider option, URL field, model auto-detect dropdown -> target: index.html, app.js
-- [ ] Step 3: Verify against local Ollama: model list loads, translation round-trip works; document OLLAMA_ORIGINS -> target: manual test + README
+- [x] Step 1: Fetch upstream PR #7 diff, adapt provider code to our llm.js structure -> target: llm.js
+- [x] Step 2: Settings UI: provider option, URL field, model auto-detect dropdown -> target: index.html, app.js
+- [x] Step 3: Verify against local Ollama: model list loads, translation round-trip works; document OLLAMA_ORIGINS -> target: manual test + README

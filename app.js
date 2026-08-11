@@ -4250,6 +4250,10 @@ function setupEventListeners() {
         });
     });
 
+    // Ollama model list refresh
+    const ollamaRefreshBtn = document.getElementById('ollama-refresh-models');
+    if (ollamaRefreshBtn) ollamaRefreshBtn.addEventListener('click', refreshOllamaModels);
+
     // Show/hide key buttons for all providers
     document.querySelectorAll('.settings-show-key').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -5393,9 +5397,9 @@ async function aiTranslateAll() {
     // Get selected provider and API key
     const provider = getSelectedProvider();
     const providerConfig = llmProviders[provider];
-    const apiKey = localStorage.getItem(providerConfig.storageKey);
+    const apiKey = providerConfig.storageKey ? localStorage.getItem(providerConfig.storageKey) : null;
 
-    if (!apiKey) {
+    if (providerConfig.storageKey && !apiKey) {
         setTranslateStatus(`Add your LLM API key in Settings to use AI translation.`, 'error');
         return;
     }
@@ -5450,6 +5454,8 @@ Translate to these language codes: ${targetLangs.join(', ')}`;
             responseText = await translateWithOpenAI(apiKey, prompt);
         } else if (provider === 'google') {
             responseText = await translateWithGoogle(apiKey, prompt);
+        } else if (provider === 'ollama') {
+            responseText = await translateWithOllama(prompt);
         }
 
         // Clean up response - remove markdown code blocks if present
@@ -5706,9 +5712,9 @@ async function translateAllText() {
     // Get selected provider and API key
     const provider = getSelectedProvider();
     const providerConfig = llmProviders[provider];
-    const apiKey = localStorage.getItem(providerConfig.storageKey);
+    const apiKey = providerConfig.storageKey ? localStorage.getItem(providerConfig.storageKey) : null;
 
-    if (!apiKey) {
+    if (providerConfig.storageKey && !apiKey) {
         await showAppAlert('Add your LLM API key in Settings to use AI translation.', 'error');
         return;
     }
@@ -5846,6 +5852,8 @@ Translate to these language codes: ${targetLangs.join(', ')}`;
             responseText = await translateWithOpenAI(apiKey, prompt);
         } else if (provider === 'google') {
             responseText = await translateWithGoogle(apiKey, prompt);
+        } else if (provider === 'ollama') {
+            responseText = await translateWithOllama(prompt);
         }
 
         updateStatus('Processing response...', 'Parsing translations');
@@ -6001,6 +6009,25 @@ async function translateWithGoogle(apiKey, prompt) {
     return data.candidates[0].content.parts[0].text;
 }
 
+async function translateWithOllama(prompt) {
+    const model = getSelectedModel('ollama');
+    if (!model) throw new Error('No Ollama model selected. Pick one in Settings.');
+
+    const data = await ollamaRequest('/api/chat', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            model: model,
+            messages: [{ role: "user", content: prompt }],
+            stream: false
+        })
+    });
+
+    return data.message.content;
+}
+
 function setTranslateStatus(message, type) {
     const status = document.getElementById('ai-translate-status');
     status.textContent = message;
@@ -6039,6 +6066,20 @@ function openSettingsModal() {
 
     // Load all saved API keys and models
     Object.entries(llmProviders).forEach(([provider, config]) => {
+        // Local providers (Ollama): base URL + saved model, models list is fetched on demand
+        if (config.baseUrlStorageKey) {
+            const urlInput = document.getElementById(`settings-base-url-${provider}`);
+            if (urlInput) urlInput.value = localStorage.getItem(config.baseUrlStorageKey) || config.defaultBaseUrl;
+
+            const select = document.getElementById(`settings-model-${provider}`);
+            const savedModel = localStorage.getItem(config.modelStorageKey);
+            if (select) {
+                select.innerHTML = '';
+                select.add(new Option(savedModel || 'Refresh to load models', savedModel || ''));
+            }
+            return;
+        }
+
         const savedKey = localStorage.getItem(config.storageKey);
         const input = document.getElementById(`settings-api-key-${provider}`);
         if (input) {
@@ -6089,6 +6130,47 @@ function updateProviderSection(provider) {
     });
 }
 
+// Fetch the model list from the Ollama server and populate the settings dropdown
+async function refreshOllamaModels() {
+    const config = llmProviders.ollama;
+    const btn = document.getElementById('ollama-refresh-models');
+    const urlInput = document.getElementById('settings-base-url-ollama');
+    const select = document.getElementById('settings-model-ollama');
+    const status = document.getElementById('settings-key-status-ollama');
+    if (!btn || !urlInput || !select || !status) return;
+
+    const baseUrl = urlInput.value.trim() || config.defaultBaseUrl;
+    btn.disabled = true;
+    status.textContent = 'Loading models...';
+    status.className = 'settings-key-status';
+
+    try {
+        const models = await fetchOllamaModels(baseUrl);
+        const savedModel = localStorage.getItem(config.modelStorageKey);
+        select.innerHTML = '';
+
+        if (models.length === 0) {
+            select.add(new Option('No models installed', ''));
+            status.textContent = 'No models found. Pull one first, e.g. ollama pull llama3.2';
+            status.className = 'settings-key-status error';
+            return;
+        }
+
+        models.forEach(name => select.add(new Option(name, name)));
+        if (savedModel && models.includes(savedModel)) select.value = savedModel;
+        status.textContent = `✓ Found ${models.length} model(s)`;
+        status.className = 'settings-key-status success';
+    } catch (error) {
+        console.error('Ollama model list failed:', error);
+        select.innerHTML = '';
+        select.add(new Option('Could not load models', ''));
+        status.textContent = error.message;
+        status.className = 'settings-key-status error';
+    } finally {
+        btn.disabled = false;
+    }
+}
+
 function saveSettings() {
     // Save theme preference
     const activeThemeBtn = document.querySelector('#theme-selector button.active');
@@ -6109,30 +6191,39 @@ function saveSettings() {
     Object.entries(llmProviders).forEach(([provider, config]) => {
         const input = document.getElementById(`settings-api-key-${provider}`);
         const status = document.getElementById(`settings-key-status-${provider}`);
-        if (!input || !status) return;
 
-        const key = input.value.trim();
+        if (input && status) {
+            const key = input.value.trim();
 
-        if (key) {
-            // Validate key format
-            if (key.startsWith(config.keyPrefix)) {
-                localStorage.setItem(config.storageKey, key);
-                status.textContent = '✓ API key saved';
-                status.className = 'settings-key-status success';
+            if (key) {
+                // Validate key format
+                if (key.startsWith(config.keyPrefix)) {
+                    localStorage.setItem(config.storageKey, key);
+                    status.textContent = '✓ API key saved';
+                    status.className = 'settings-key-status success';
+                } else {
+                    status.textContent = `Invalid format. Should start with ${config.keyPrefix}...`;
+                    status.className = 'settings-key-status error';
+                    if (provider === selectedProvider) allValid = false;
+                }
             } else {
-                status.textContent = `Invalid format. Should start with ${config.keyPrefix}...`;
-                status.className = 'settings-key-status error';
-                if (provider === selectedProvider) allValid = false;
+                localStorage.removeItem(config.storageKey);
+                status.textContent = '';
+                status.className = 'settings-key-status';
             }
-        } else {
-            localStorage.removeItem(config.storageKey);
-            status.textContent = '';
-            status.className = 'settings-key-status';
+        }
+
+        // Save base URL for local providers (Ollama)
+        if (config.baseUrlStorageKey) {
+            const urlInput = document.getElementById(`settings-base-url-${provider}`);
+            if (urlInput) {
+                localStorage.setItem(config.baseUrlStorageKey, urlInput.value.trim() || config.defaultBaseUrl);
+            }
         }
 
         // Save model selection
         const modelSelect = document.getElementById(`settings-model-${provider}`);
-        if (modelSelect) {
+        if (modelSelect && config.modelStorageKey) {
             localStorage.setItem(config.modelStorageKey, modelSelect.value);
         }
     });

@@ -39,8 +39,66 @@ const llmProviders = {
             { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro ($$$)' }
         ],
         defaultModel: 'gemini-2.5-flash'
+    },
+    ollama: {
+        name: 'Ollama (Local)',
+        // No API key: keyPrefix/storageKey intentionally absent
+        baseUrlStorageKey: 'ollamaUrl',
+        defaultBaseUrl: 'http://localhost:11434',
+        modelStorageKey: 'ollamaModel',
+        models: [], // filled at runtime from GET /api/tags
+        defaultModel: ''
     }
 };
+
+// Shown whenever the Ollama server can't be reached (not running, or CORS blocked).
+const OLLAMA_CONNECT_HINT = 'Could not reach Ollama. Check that Ollama is running and that OLLAMA_ORIGINS allows this page.';
+
+/**
+ * Get the Ollama base URL (no trailing slash)
+ * @returns {string}
+ */
+function getOllamaBaseUrl() {
+    const saved = (localStorage.getItem(llmProviders.ollama.baseUrlStorageKey) || '').trim();
+    return (saved || llmProviders.ollama.defaultBaseUrl).replace(/\/+$/, '');
+}
+
+/**
+ * Call the Ollama HTTP API, mapping transport/CORS failures to a friendly error
+ * @param {string} path - API path, e.g. '/api/tags'
+ * @param {object} options - fetch options
+ * @param {string|null} baseUrl - override base URL (defaults to the saved one)
+ * @returns {Promise<object>} - parsed JSON response
+ */
+async function ollamaRequest(path, options = {}, baseUrl = null) {
+    const url = (baseUrl ? baseUrl.trim().replace(/\/+$/, '') : getOllamaBaseUrl()) + path;
+
+    let response;
+    try {
+        response = await fetch(url, options);
+    } catch (error) {
+        throw new Error(OLLAMA_CONNECT_HINT);
+    }
+
+    if (!response.ok) {
+        if (response.status === 404) {
+            throw new Error('Ollama returned 404. Check the server URL and that the model has been pulled.');
+        }
+        throw new Error(`Ollama request failed: ${response.status}`);
+    }
+
+    return response.json();
+}
+
+/**
+ * List models installed on the Ollama server
+ * @param {string|null} baseUrl - override base URL
+ * @returns {Promise<string[]>} - model names
+ */
+async function fetchOllamaModels(baseUrl = null) {
+    const data = await ollamaRequest('/api/tags', {}, baseUrl);
+    return (data.models || []).map(model => model.name).filter(Boolean);
+}
 
 /**
  * Get the selected model for a provider
