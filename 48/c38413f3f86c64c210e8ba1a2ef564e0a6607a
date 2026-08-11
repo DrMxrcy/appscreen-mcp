@@ -1,0 +1,37 @@
+styles.css
+  s_d402dad4387bd5::t_3a98828a186563 853-857,2260-2282,3557
+app.js
+  s_d402dad4387bd5::t_3a98828a186563 1545,1554-1653,2550,2721,3413,6962,7001,8835
+.roadmap/config.json
+  s_d402dad4387bd5::t_6faf862052fb5b 101
+.roadmap/plans/005-hex-input-for-color-controls-upstream-pr-43.md
+  s_3090e083f8d04c::t_6f1b77a15f4b98 6,24-25
+CHANGELOG.md
+  s_3090e083f8d04c::t_179822c0fa9aeb 13
+ROADMAP.md
+  s_3090e083f8d04c::t_730eef289a0405 23-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "48c38413f3f86c64c210e8ba1a2ef564e0a6607a",
+  "prompts": {},
+  "sessions": {
+    "s_3090e083f8d04c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "eb3b30b3-998d-43e8-bea3-a3296dc96125",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    },
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
