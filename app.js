@@ -8357,8 +8357,22 @@ async function exportCurrent() {
 
     const link = document.createElement('a');
     link.download = `screenshot-${state.selectedIndex + 1}.png`;
-    link.href = canvas.toDataURL('image/png');
+    link.href = canvasToOpaquePngDataUrl(canvas);
     link.click();
+}
+
+// App Store Connect rejects screenshots with an alpha channel — flatten
+// onto an opaque white base before export (issue: transparent backgrounds
+// or alpha-bearing background images leak transparency into the PNG).
+function canvasToOpaquePngDataUrl(sourceCanvas) {
+    const flat = document.createElement('canvas');
+    flat.width = sourceCanvas.width;
+    flat.height = sourceCanvas.height;
+    const fctx = flat.getContext('2d');
+    fctx.fillStyle = '#ffffff';
+    fctx.fillRect(0, 0, flat.width, flat.height);
+    fctx.drawImage(sourceCanvas, 0, 0);
+    return flat.toDataURL('image/png');
 }
 
 async function exportAll() {
@@ -8439,7 +8453,7 @@ async function exportAllForLanguage(lang) {
         await new Promise(resolve => setTimeout(resolve, 100));
 
         // Get canvas data as base64, strip the data URL prefix
-        const dataUrl = canvas.toDataURL('image/png');
+        const dataUrl = canvasToOpaquePngDataUrl(canvas);
         const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
 
         zip.file(`screenshot-${i + 1}.png`, base64Data, { base64: true });
@@ -8511,7 +8525,7 @@ async function exportAllLanguages() {
             await new Promise(resolve => setTimeout(resolve, 100));
 
             // Get canvas data as base64, strip the data URL prefix
-            const dataUrl = canvas.toDataURL('image/png');
+            const dataUrl = canvasToOpaquePngDataUrl(canvas);
             const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
 
             // Use language code as folder name

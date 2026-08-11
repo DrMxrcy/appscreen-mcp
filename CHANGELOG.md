@@ -14,10 +14,10 @@
 - (pending) Export screenshots as JPG or PNG, whichever your workflow needs
 - (pending) Align headlines and subheadlines left, center, or right
 
-## v1.0.1 — (in progress)
+## v1.0.1 — 2026-08-11
 
 ### 🐛 Fixed
 - Editing stays fast and responsive even with many screenshots in a project
 - Background images now save reliably on every screenshot
 - Text position and style no longer get mixed up when switching languages
-- (pending) Exported images are always accepted by App Store Connect, no transparency errors
+- Exported images are always accepted by App Store Connect, no transparency errors

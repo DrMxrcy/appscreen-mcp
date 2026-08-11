@@ -98,5 +98,8 @@
     "autoCommit": true,
     "gitTagOnRelease": false
   },
-  "last_seen_sha": "008b2176a45092ebfc441c75fe7e91c0355ae6d7"
+  "last_seen_sha": "5a929c3d120258a16c3b2a9a900213e69498d9be",
+  "versionDates": {
+    "1.0.1": "2026-08-11"
+  }
 }

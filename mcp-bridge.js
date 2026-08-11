@@ -250,7 +250,9 @@
         }
 
         await settleRender();
-        const dataUrl = canvas.toDataURL('image/png');
+        const dataUrl = typeof canvasToOpaquePngDataUrl === 'function'
+            ? canvasToOpaquePngDataUrl(canvas)
+            : canvas.toDataURL('image/png');
 
         state.selectedIndex = originalIndex;
         state.currentLanguage = originalLanguage;
