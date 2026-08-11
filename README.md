@@ -2,7 +2,7 @@
 
 A free, open-source tool for creating beautiful App Store screenshots with customizable backgrounds, text overlays, 2D and 3D device mockups, and full MCP-based automation for coding agents.
 
-**[Start using it now. Hosted on GitHub Pages](https://appsolves.github.io/appscreen-mcp/)**
+**[Start using it now. Hosted on GitHub Pages](https://drmxrcy.github.io/appscreen-mcp/)**
 
 ![App Store Screenshot Generator](img/screenshot-generator.png)
 
@@ -14,7 +14,7 @@ A free, open-source tool for creating beautiful App Store screenshots with custo
 ## Features
 
 > [!TIP]
-> This tool has an `npm` package available under [`@appsolves/appscreen-mcp`](https://www.npmjs.com/package/@appsolves/appscreen-mcp) that exposes the full screenshot generator functionality as an MCP server. See the [**MCP Automation**](#mcp-automation) section below and the [MCP server README](mcp-server/README.md) for details.
+> This tool has an `npm` package available under [`@drmxrcy/appscreen-mcp`](https://www.npmjs.com/package/@drmxrcy/appscreen-mcp) that exposes the full screenshot generator functionality as an MCP server. See the [**MCP Automation**](#mcp-automation) section below and the [MCP server README](mcp-server/README.md) for details.
 
 ### Output & Export
 
@@ -92,7 +92,7 @@ With MCP, agents can:
 
 ### Just Want to Use It?
 
-Visit **[appsolves.github.io/appscreen-mcp](https://appsolves.github.io/appscreen-mcp/)** to use the tool directly in your browser. No installation needed!
+Visit **[drmxrcy.github.io/appscreen-mcp](https://drmxrcy.github.io/appscreen-mcp/)** to use the tool directly in your browser. No installation needed!
 
 ---
 
@@ -128,7 +128,7 @@ Run the pre-built Docker image from GitHub Container Registry:
 
 ```bash
 # Using Docker directly
-docker run -d -p 8080:80 ghcr.io/appsolves/appscreen-mcp:latest
+docker run -d -p 8080:80 ghcr.io/drmxrcy/appscreen-mcp:latest
 
 # Using Docker Compose
 docker compose up -d
@@ -201,7 +201,7 @@ cd mcp-server
 npm install
 npx playwright install chromium
 npm run build
-APPSCREEN_URL=https://appsolves.github.io/appscreen-mcp/ npm start
+APPSCREEN_URL=https://drmxrcy.github.io/appscreen-mcp/ npm start
 ```
 
 See **[`mcp-server/README.md`](mcp-server/README.md)** for:

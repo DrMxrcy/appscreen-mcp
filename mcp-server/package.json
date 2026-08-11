@@ -1,6 +1,6 @@
 {
-  "name": "@appsolves/appscreen-mcp",
-  "version": "1.0.2",
+  "name": "@drmxrcy/appscreen-mcp",
+  "version": "1.1.0",
   "description": "MCP server for controlling the AppScreen App Store Screenshot Generator.",
   "type": "module",
   "private": false,
@@ -10,14 +10,14 @@
     "email": "contact@appsolves.dev",
     "url": "https://appsolves.dev"
   },
-  "homepage": "https://appsolves.github.io/appscreen-mcp/",
+  "homepage": "https://drmxrcy.github.io/appscreen-mcp/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AppSolves/appscreen-mcp.git",
+    "url": "git+https://github.com/DrMxrcy/appscreen-mcp.git",
     "directory": "mcp-server"
   },
   "bugs": {
-    "url": "https://github.com/AppSolves/appscreen-mcp/issues"
+    "url": "https://github.com/DrMxrcy/appscreen-mcp/issues"
   },
   "bin": {
     "appscreen-mcp": "dist/index.js"

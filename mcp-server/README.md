@@ -1,5 +1,7 @@
 # AppScreen MCP Server
 
+> Forked from [AppSolves/appscreen-mcp](https://github.com/AppSolves/appscreen-mcp).
+
 This package exposes the AppScreen App Store Screenshot Generator as a Model Context Protocol server.
 
 It uses a clean in-app automation bridge (`../mcp-bridge.js`) and Playwright. The MCP server does not scrape random UI selectors. It loads the app, calls `window.AppScreenMCP`, and saves exported PNG/ZIP artifacts to disk when requested.
@@ -9,19 +11,19 @@ It uses a clean in-app automation bridge (`../mcp-bridge.js`) and Playwright. Th
 The MCP server is published on npm as:
 
 ```bash
-@appsolves/appscreen-mcp
+@drmxrcy/appscreen-mcp
 ```
 
 For most users, no repository clone is required. MCP clients can run the server directly with `npx`:
 
 ```bash
-npx -y @appsolves/appscreen-mcp@latest
+npx -y @drmxrcy/appscreen-mcp@latest
 ```
 
 The package controls the hosted AppScreen frontend by default:
 
 ```txt
-https://appsolves.github.io/appscreen-mcp/
+https://drmxrcy.github.io/appscreen-mcp/
 ```
 
 You only need to clone this repository if you want to develop the MCP server or run a local copy of the frontend.
@@ -54,14 +56,14 @@ For the hosted fork:
 
 ```bash
 cd mcp-server
-APPSCREEN_URL=https://appsolves.github.io/appscreen-mcp/ npm start
+APPSCREEN_URL=https://drmxrcy.github.io/appscreen-mcp/ npm start
 ```
 
 ## Environment variables
 
 | Variable | Required | Default | Description |
 |---|---:|---|---|
-| `APPSCREEN_URL` | No | `https://appsolves.github.io/appscreen-mcp/` | URL of the AppScreen frontend that the MCP server should control. Use `http://localhost:8000` for local development or your hosted GitHub Pages URL for the public app. |
+| `APPSCREEN_URL` | No | `https://drmxrcy.github.io/appscreen-mcp/` | URL of the AppScreen frontend that the MCP server should control. Use `http://localhost:8000` for local development or your hosted GitHub Pages URL for the public app. |
 | `APPSCREEN_OUTPUT_DIR` | No | `~/AppScreenMCP/outputs` | Directory where exported PNG/ZIP artifacts are saved when `saveToFile` is enabled. Relative paths are resolved from the MCP server process working directory, so absolute paths are recommended for predictable behavior. |
 | `APPSCREEN_HEADLESS` | No | `true` | Controls whether Playwright runs Chromium hidden or visible. Set to `false` to see the browser while debugging or watching an agent control the app. |
 | `APPSCREEN_BROWSER_TIMEOUT_MS` | No | `60000` | Timeout in milliseconds for browser navigation, bridge initialization, and Playwright operations. Increase this if the hosted app or large screenshot sets load slowly. |
@@ -87,7 +89,7 @@ For most users, only `APPSCREEN_URL` and optionally `APPSCREEN_HEADLESS` are nee
 
 ```toml
 [mcp_servers.appscreen.env]
-APPSCREEN_URL = "https://appsolves.github.io/appscreen-mcp/"
+APPSCREEN_URL = "https://drmxrcy.github.io/appscreen-mcp/"
 APPSCREEN_HEADLESS = "true"
 ```
 
@@ -95,7 +97,7 @@ If you want predictable export and browser persistence paths, set absolute direc
 
 ```toml
 [mcp_servers.appscreen.env]
-APPSCREEN_URL = "https://appsolves.github.io/appscreen-mcp/"
+APPSCREEN_URL = "https://drmxrcy.github.io/appscreen-mcp/"
 APPSCREEN_OUTPUT_DIR = "C:/Users/YourName/AppScreenMCP/outputs"
 APPSCREEN_BROWSER_PROFILE_DIR = "C:/Users/YourName/AppScreenMCP/browser-profile"
 APPSCREEN_HEADLESS = "false"
@@ -115,10 +117,10 @@ Add this to your Codex MCP config:
 ```toml
 [mcp_servers.appscreen]
 command = "npx"
-args = ["-y", "@appsolves/appscreen-mcp@latest"]
+args = ["-y", "@drmxrcy/appscreen-mcp@latest"]
 
 [mcp_servers.appscreen.env]
-APPSCREEN_URL = "https://appsolves.github.io/appscreen-mcp/"
+APPSCREEN_URL = "https://drmxrcy.github.io/appscreen-mcp/"
 APPSCREEN_HEADLESS = "true"
 ```
 
@@ -127,10 +129,10 @@ For visible browser debugging and explicit output paths:
 ```toml
 [mcp_servers.appscreen]
 command = "npx"
-args = ["-y", "@appsolves/appscreen-mcp@latest"]
+args = ["-y", "@drmxrcy/appscreen-mcp@latest"]
 
 [mcp_servers.appscreen.env]
-APPSCREEN_URL = "https://appsolves.github.io/appscreen-mcp/"
+APPSCREEN_URL = "https://drmxrcy.github.io/appscreen-mcp/"
 APPSCREEN_OUTPUT_DIR = "C:/Users/YourName/AppScreenMCP/outputs"
 APPSCREEN_BROWSER_PROFILE_DIR = "C:/Users/YourName/AppScreenMCP/browser-profile"
 APPSCREEN_HEADLESS = "false"
@@ -145,9 +147,9 @@ To use the published npm package:
   "mcpServers": {
     "appscreen": {
       "command": "npx",
-      "args": ["-y", "@appsolves/appscreen-mcp@latest"],
+      "args": ["-y", "@drmxrcy/appscreen-mcp@latest"],
       "env": {
-        "APPSCREEN_URL": "https://appsolves.github.io/appscreen-mcp/",
+        "APPSCREEN_URL": "https://drmxrcy.github.io/appscreen-mcp/",
         "APPSCREEN_HEADLESS": "true"
       }
     }

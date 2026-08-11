@@ -8,10 +8,10 @@
     "url": "https://yuzuhub.com"
   },
   "license": "MIT",
-  "homepage": "https://appsolves.github.io/appscreen-mcp/",
+  "homepage": "https://drmxrcy.github.io/appscreen-mcp/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AppSolves/appscreen-mcp"
+    "url": "https://github.com/DrMxrcy/appscreen-mcp"
   },
   "scripts": {
     "serve": "python3 -m http.server 8000",

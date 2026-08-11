@@ -10,7 +10,7 @@ import { chromium, type BrowserContext, type Page } from 'playwright';
 import { z } from 'zod';
 import { SCREENSHOT_DISPLAY_TYPES, uploadScreenshots } from './asc-upload.js';
 
-const DEFAULT_APP_URL = process.env.APPSCREEN_URL ?? 'https://appsolves.github.io/appscreen-mcp/';
+const DEFAULT_APP_URL = process.env.APPSCREEN_URL ?? 'https://drmxrcy.github.io/appscreen-mcp/';
 const OUTPUT_DIR =
   process.env.APPSCREEN_OUTPUT_DIR ??
   path.join(os.homedir(), 'AppScreenMCP', 'outputs');

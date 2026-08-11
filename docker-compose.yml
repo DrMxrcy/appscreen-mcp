@@ -1,6 +1,6 @@
 services:
   appscreen-mcp:
-    image: ghcr.io/appsolves/appscreen-mcp:latest
+    image: ghcr.io/drmxrcy/appscreen-mcp:latest
     container_name: appscreen-mcp
     ports:
       - "8080:80"
