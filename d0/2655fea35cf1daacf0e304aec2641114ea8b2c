@@ -1,0 +1,28 @@
+app.js
+  s_d402dad4387bd5::t_1f7af90b74a2e7 1720-1723,1729-1734
+  s_d402dad4387bd5::t_881662f3949821 1735-1736
+.roadmap/config.json
+  s_d402dad4387bd5::t_f70a7dcdacfdc9 155
+.roadmap/plans/014-upstream-pr-26-indexeddb-datacloneerror-guard-take-only-if-bug-reproduces-in-our-fork.md
+  s_d402dad4387bd5::t_5f08805cb78e9a 6,23-24
+CHANGELOG.md
+  s_d402dad4387bd5::t_88471296f144e7 19
+ROADMAP.md
+  s_d402dad4387bd5::t_0deff8aaa785b8 23,28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "d02655fea35cf1daacf0e304aec2641114ea8b2c",
+  "prompts": {},
+  "sessions": {
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
