@@ -1,0 +1,84 @@
+.roadmap/plans/003-fix-per-language-text-layout-state-upstream-pr-11.md
+  s_d402dad4387bd5::t_2fc0eb189588ec 14-16,19-20,23-25
+  s_d402dad4387bd5::t_84c8a7c4652e97 1-13,17-18,21-22
+CHANGELOG.md
+  s_7f4eae0d753960::t_6be02aa63664b8 1
+  s_d402dad4387bd5::t_84c8a7c4652e97 2,17-23
+  s_d402dad4387bd5::t_85eeb751f69915 3-16
+.roadmap/plans/001-fix-severe-slowdown-with-5-screenshots-upstream-pr-39.md
+  s_d402dad4387bd5::t_84c8a7c4652e97 1-13,17-18,21-22
+  s_d402dad4387bd5::t_d96aa7f520f0a4 14-16,19-20,23-25
+.roadmap/plans/007-text-alignment-options-upstream-issue-29.md
+  s_d402dad4387bd5::t_7c3320da68f518 14-15,18-21,24-26
+  s_d402dad4387bd5::t_85eeb751f69915 1-13,16-17,22-23
+AGENTS.md
+  s_7f4eae0d753960::t_6be02aa63664b8 1-41
+  s_53f7ae573891bf::t_6c9fcdebb08986 42-85
+.roadmap/plans/004-flatten-alpha-channel-on-png-export-upstream-issue-24.md
+  s_d402dad4387bd5::t_84c8a7c4652e97 1-13,17-18,21-22
+  s_d402dad4387bd5::t_f9163546dfbd26 14-16,19-20,23-24
+.roadmap/config.json
+  s_d402dad4387bd5::t_84c8a7c4652e97 5-40,95-96
+  s_7f4eae0d753960::t_6be02aa63664b8 1-3,97-101
+  s_d402dad4387bd5::t_85eeb751f69915 4,41-94
+.roadmap/plans/002-fix-image-background-not-persisting-across-multiple-screenshots-upstream-pr-33.md
+  s_d402dad4387bd5::t_84c8a7c4652e97 1-13,17-18,21-22
+  s_d402dad4387bd5::t_d79c847540ecaf 14-16,19-20,23-25
+.roadmap/plans/008-app-store-connect-direct-upload-mcp-tool-upstream-issue-25.md
+  s_d402dad4387bd5::t_85eeb751f69915 1-13,16-17,22-23
+  s_d402dad4387bd5::t_511d192bfb93a5 14-15,18-21,24-27
+ROADMAP.md
+  s_7f4eae0d753960::t_6be02aa63664b8 1-3,10-14,32
+  s_d402dad4387bd5::t_84c8a7c4652e97 15-21
+  s_d402dad4387bd5::t_85eeb751f69915 22-31
+  s_d402dad4387bd5::t_719d38fecdbc09 4-9
+.roadmap/plans/009-http-transport-and-self-hosted-mcp-stack.md
+  s_d402dad4387bd5::t_85eeb751f69915 1-13,16-17,22-23
+  s_d402dad4387bd5::t_fbc64958c36aaf 14-15,18-21,24-26
+.roadmap/plans/006-jpg-export-with-format-switching-upstream-pr-34.md
+  s_d402dad4387bd5::t_85eeb751f69915 1-13,16-17,22-23
+  s_d402dad4387bd5::t_8466d25a1c0a87 14-15,18-21,24-26
+.gitignore
+  s_53f7ae573891bf::t_12dde5611d8b76 25-33
+.roadmap/plans/010-ollama-local-model-support-for-ai-translations-upstream-pr-7.md
+  s_d402dad4387bd5::t_85eeb751f69915 1-13,16-17,22-23
+  s_d402dad4387bd5::t_f70bf655bf3ad8 14-15,18-21,24-26
+CLAUDE.md
+  s_7f4eae0d753960::t_6be02aa63664b8 115-156
+  s_53f7ae573891bf::t_6c9fcdebb08986 157-200
+.roadmap/plans/005-hex-input-for-color-controls-upstream-pr-43.md
+  s_d402dad4387bd5::t_85eeb751f69915 1-13,16-17,22-23
+  s_d402dad4387bd5::t_1ee1f6a9e35f23 14-15,18-21,24-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "349d19d54a722ef7387c66f14e3fdee29293a63b",
+  "prompts": {},
+  "sessions": {
+    "s_53f7ae573891bf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b2a04fca-ec2f-4e1a-b049-1ccbc6b3d781",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    },
+    "s_7f4eae0d753960": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8cee2399-f9ef-4377-b88c-f247b2e3be6d",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    },
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
