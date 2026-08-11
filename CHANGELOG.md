@@ -19,5 +19,5 @@
 ### 🐛 Fixed
 - Editing stays fast and responsive even with many screenshots in a project
 - Background images now save reliably on every screenshot
-- (pending) Text position and style no longer get mixed up when switching languages
+- Text position and style no longer get mixed up when switching languages
 - (pending) Exported images are always accepted by App Store Connect, no transparency errors
