@@ -1,0 +1,31 @@
+app.js
+  s_d402dad4387bd5::t_9e0c8cd30fba69 8360,8364-8375
+  s_d402dad4387bd5::t_1fc35559855b56 8456,8528
+  s_d402dad4387bd5::t_54ffdca053ee58 8376-8377
+mcp-bridge.js
+  s_d402dad4387bd5::t_7bbbf4491185be 253-255
+.roadmap/config.json
+  s_d402dad4387bd5::t_e92667a5f26f6c 101-104
+.roadmap/plans/004-flatten-alpha-channel-on-png-export-upstream-issue-24.md
+  s_d402dad4387bd5::t_472cf703bf95a3 6,23-24
+CHANGELOG.md
+  s_d402dad4387bd5::t_386551c569de48 17,23
+ROADMAP.md
+  s_d402dad4387bd5::t_0b60b597cfc982 17,21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "89625ad4966fad68bae158dd17cadf83cce3b685",
+  "prompts": {},
+  "sessions": {
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
