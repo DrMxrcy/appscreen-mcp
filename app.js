@@ -4219,6 +4219,14 @@ function setupEventListeners() {
         });
     });
 
+    // Export format selector buttons
+    document.querySelectorAll('#export-format-selector button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#export-format-selector button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+    });
+
     // Provider radio buttons
     document.querySelectorAll('input[name="ai-provider"]').forEach(radio => {
         radio.addEventListener('change', (e) => {
@@ -6041,6 +6049,12 @@ function openSettingsModal() {
         btn.classList.toggle('active', btn.dataset.theme === savedTheme);
     });
 
+    // Load saved export format preference
+    const savedFormat = getExportFormat();
+    document.querySelectorAll('#export-format-selector button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.format === savedFormat);
+    });
+
     document.getElementById('settings-modal').classList.add('visible');
 }
 
@@ -6056,6 +6070,10 @@ function saveSettings() {
     const themePreference = activeThemeBtn ? activeThemeBtn.dataset.theme : 'auto';
     localStorage.setItem('themePreference', themePreference);
     applyTheme(themePreference);
+
+    // Save export format preference
+    const activeFormatBtn = document.querySelector('#export-format-selector button.active');
+    localStorage.setItem('exportFormat', activeFormatBtn ? activeFormatBtn.dataset.format : 'png');
 
     // Save selected provider
     const selectedProvider = document.querySelector('input[name="ai-provider"]:checked').value;
@@ -8383,6 +8401,17 @@ function hexToRgba(hex, alpha) {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
+function getExportFormat() {
+    const stored = localStorage.getItem('exportFormat');
+    return stored === 'jpg' || stored === 'jpeg' ? 'jpg' : 'png'; // 'jpeg' = legacy upstream value
+}
+
+function getExportEncoding() {
+    return getExportFormat() === 'jpg'
+        ? { mime: 'image/jpeg', ext: 'jpg', quality: 0.92 }
+        : { mime: 'image/png', ext: 'png', quality: undefined };
+}
+
 async function exportCurrent() {
     if (state.screenshots.length === 0) {
         await showAppAlert('Please upload a screenshot first', 'info');
@@ -8392,16 +8421,17 @@ async function exportCurrent() {
     // Ensure canvas is up-to-date synchronously before reading toDataURL
     updateCanvasNow();
 
+    const { mime, ext, quality } = getExportEncoding();
     const link = document.createElement('a');
-    link.download = `screenshot-${state.selectedIndex + 1}.png`;
-    link.href = canvasToOpaquePngDataUrl(canvas);
+    link.download = `screenshot-${state.selectedIndex + 1}.${ext}`;
+    link.href = canvasToOpaqueDataUrl(canvas, mime, quality);
     link.click();
 }
 
 // App Store Connect rejects screenshots with an alpha channel — flatten
 // onto an opaque white base before export (issue: transparent backgrounds
 // or alpha-bearing background images leak transparency into the PNG).
-function canvasToOpaquePngDataUrl(sourceCanvas) {
+function canvasToOpaqueDataUrl(sourceCanvas, mime = 'image/png', quality) {
     const flat = document.createElement('canvas');
     flat.width = sourceCanvas.width;
     flat.height = sourceCanvas.height;
@@ -8409,7 +8439,12 @@ function canvasToOpaquePngDataUrl(sourceCanvas) {
     fctx.fillStyle = '#ffffff';
     fctx.fillRect(0, 0, flat.width, flat.height);
     fctx.drawImage(sourceCanvas, 0, 0);
-    return flat.toDataURL('image/png');
+    return quality !== undefined ? flat.toDataURL(mime, quality) : flat.toDataURL(mime);
+}
+
+// Kept for callers that always want PNG (mcp-bridge.js references this by name).
+function canvasToOpaquePngDataUrl(sourceCanvas) {
+    return canvasToOpaqueDataUrl(sourceCanvas);
 }
 
 async function exportAll() {
@@ -8490,10 +8525,11 @@ async function exportAllForLanguage(lang) {
         await new Promise(resolve => setTimeout(resolve, 100));
 
         // Get canvas data as base64, strip the data URL prefix
-        const dataUrl = canvasToOpaquePngDataUrl(canvas);
-        const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
+        const { mime, ext, quality } = getExportEncoding();
+        const dataUrl = canvasToOpaqueDataUrl(canvas, mime, quality);
+        const base64Data = dataUrl.replace(/^data:[^;]+;base64,/, '');
 
-        zip.file(`screenshot-${i + 1}.png`, base64Data, { base64: true });
+        zip.file(`screenshot-${i + 1}.${ext}`, base64Data, { base64: true });
     }
 
     // Restore original settings
@@ -8562,11 +8598,12 @@ async function exportAllLanguages() {
             await new Promise(resolve => setTimeout(resolve, 100));
 
             // Get canvas data as base64, strip the data URL prefix
-            const dataUrl = canvasToOpaquePngDataUrl(canvas);
-            const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
+            const { mime, ext, quality } = getExportEncoding();
+            const dataUrl = canvasToOpaqueDataUrl(canvas, mime, quality);
+            const base64Data = dataUrl.replace(/^data:[^;]+;base64,/, '');
 
             // Use language code as folder name
-            zip.file(`${lang}/screenshot-${i + 1}.png`, base64Data, { base64: true });
+            zip.file(`${lang}/screenshot-${i + 1}.${ext}`, base64Data, { base64: true });
         }
     }
 

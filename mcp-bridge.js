@@ -231,7 +231,13 @@
         return String(dataUrl).replace(/^data:[^;]+;base64,/, '');
     }
 
-    async function renderPngDataUrl(index = state.selectedIndex, lang = state.currentLanguage) {
+    function encodingFor(format) {
+        return format === 'jpg'
+            ? { mime: 'image/jpeg', ext: 'jpg', quality: 0.92 }
+            : { mime: 'image/png', ext: 'png', quality: undefined };
+    }
+
+    async function renderPngDataUrl(index = state.selectedIndex, lang = state.currentLanguage, format = 'png') {
         const originalIndex = state.selectedIndex;
         const originalLanguage = state.currentLanguage;
         const originalTextLangs = state.screenshots.map((s) => ({
@@ -250,9 +256,10 @@
         }
 
         await settleRender();
-        const dataUrl = typeof canvasToOpaquePngDataUrl === 'function'
-            ? canvasToOpaquePngDataUrl(canvas)
-            : canvas.toDataURL('image/png');
+        const { mime, quality } = encodingFor(format);
+        const dataUrl = typeof canvasToOpaqueDataUrl === 'function'
+            ? canvasToOpaqueDataUrl(canvas, mime, quality)
+            : (quality !== undefined ? canvas.toDataURL(mime, quality) : canvas.toDataURL(mime));
 
         state.selectedIndex = originalIndex;
         state.currentLanguage = originalLanguage;
@@ -267,7 +274,7 @@
         return dataUrl;
     }
 
-    async function exportZipDataUrl({ languages = null, currentLanguageOnly = false } = {}) {
+    async function exportZipDataUrl({ languages = null, currentLanguageOnly = false, format = 'png' } = {}) {
         if (state.screenshots.length === 0) throw new Error('No screenshots to export.');
         if (typeof JSZip === 'undefined') throw new Error('JSZip is not loaded.');
 
@@ -278,8 +285,9 @@
 
         for (const lang of langs) {
             for (let i = 0; i < state.screenshots.length; i++) {
-                const dataUrl = await renderPngDataUrl(i, lang);
-                const path = langs.length > 1 ? `${lang}/screenshot-${i + 1}.png` : `screenshot-${i + 1}.png`;
+                const dataUrl = await renderPngDataUrl(i, lang, format);
+                const { ext } = encodingFor(format);
+                const path = langs.length > 1 ? `${lang}/screenshot-${i + 1}.${ext}` : `screenshot-${i + 1}.${ext}`;
                 zip.file(path, base64FromDataUrl(dataUrl), { base64: true });
             }
         }
@@ -691,21 +699,22 @@
             });
         },
 
-        async renderCurrentPng({ language = null } = {}) {
+        async renderCurrentPng({ language = null, format = 'png' } = {}) {
             return invoke('renderCurrentPng', async () => {
-                const dataUrl = await renderPngDataUrl(state.selectedIndex, language || state.currentLanguage);
+                const dataUrl = await renderPngDataUrl(state.selectedIndex, language || state.currentLanguage, format);
+                const { mime, ext } = encodingFor(format);
                 return {
-                    fileName: `screenshot-${state.selectedIndex + 1}.png`,
-                    mimeType: 'image/png',
+                    fileName: `screenshot-${state.selectedIndex + 1}.${ext}`,
+                    mimeType: mime,
                     dataUrl,
                     base64: base64FromDataUrl(dataUrl)
                 };
             });
         },
 
-        async exportAllZip({ languages = null, currentLanguageOnly = false } = {}) {
+        async exportAllZip({ languages = null, currentLanguageOnly = false, format = 'png' } = {}) {
             return invoke('exportAllZip', async () => {
-                const dataUrl = await exportZipDataUrl({ languages, currentLanguageOnly });
+                const dataUrl = await exportZipDataUrl({ languages, currentLanguageOnly, format });
                 return {
                     fileName: `screenshots_${state.outputDevice}_${currentLanguageOnly ? state.currentLanguage : 'all-languages'}.zip`,
                     mimeType: 'application/zip',

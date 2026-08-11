@@ -3,7 +3,7 @@ id: 6
 title: JPG export with format switching (upstream PR #34)
 type: feature
 version: 1.1.0
-status: planned
+status: done
 created: 2026-08-11
 ---
 
@@ -21,6 +21,6 @@ created: 2026-08-11
 - **Downstream impact:** JPG has no alpha — pairs with plan 4 flatten; ZIP naming uses correct extension
 
 ## 🚶 Step-by-Step Checklist
-- [ ] Step 1: Port upstream PR #34 into export pipeline + UI -> target: app.js, index.html
-- [ ] Step 2: Expose format option through MCP export tool -> target: mcp-bridge.js, mcp-server/src/index.ts
-- [ ] Step 3: Verify: PNG and JPG single + ZIP exports open correctly, right extensions -> target: manual + MCP smoke
+- [x] Step 1: Port upstream PR #34 into export pipeline + UI -> target: app.js, index.html
+- [x] Step 2: Expose format option through MCP export tool -> target: mcp-bridge.js, mcp-server/src/index.ts
+- [x] Step 3: Verify: PNG and JPG single + ZIP exports open correctly, right extensions -> target: manual + MCP smoke

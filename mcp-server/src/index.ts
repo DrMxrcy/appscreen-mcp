@@ -611,9 +611,10 @@ registerTool(
 
 registerTool(
   'appscreen_export_current_png',
-  'Render the selected screenshot as PNG. Returns base64 and optionally saves it to APPSCREEN_OUTPUT_DIR.',
+  'Render the selected screenshot as PNG (or JPG via format). Returns base64 and optionally saves it to APPSCREEN_OUTPUT_DIR.',
   {
     language: z.string().optional(),
+    format: z.enum(['png', 'jpg']).optional().describe('Image format. Defaults to png.'),
     saveToFile: z.boolean().default(true),
     fileName: z.string().optional(),
   },
@@ -630,6 +631,7 @@ registerTool(
   {
     languages: z.array(z.string()).optional(),
     currentLanguageOnly: z.boolean().default(false),
+    format: z.enum(['png', 'jpg']).optional().describe('Image format for the screenshots inside the ZIP. Defaults to png.'),
     saveToFile: z.boolean().default(true),
     fileName: z.string().optional(),
   },

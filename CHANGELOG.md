@@ -11,7 +11,7 @@
 
 ### ✨ New
 - Type exact hex color codes anywhere you pick a color
-- (pending) Export screenshots as JPG or PNG, whichever your workflow needs
+- Export screenshots as JPG or PNG, whichever your workflow needs
 - (pending) Align headlines and subheadlines left, center, or right
 
 ## v1.0.1 — 2026-08-11
