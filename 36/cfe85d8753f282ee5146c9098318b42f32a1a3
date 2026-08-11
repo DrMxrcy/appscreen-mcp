@@ -1,0 +1,45 @@
+mcp-server/src/index.ts
+  s_d402dad4387bd5::t_9763cdda0f0fc8 681-715
+  s_d402dad4387bd5::t_b4835b9efeb772 10
+  s_3090e083f8d04c::t_6133f6c01695c7 680
+mcp-server/src/asc-upload.ts
+  s_d402dad4387bd5::t_3dfbb09018c642 233-234
+  s_d402dad4387bd5::t_1862105fb1a596 1-232,235-427,432-612,615-617,619-629
+  s_d402dad4387bd5::t_296a9f8f4ad60c 613-614,618
+  s_d402dad4387bd5::t_bedbd34502cfc7 428-431
+mcp-server/README.md
+  s_d402dad4387bd5::t_0a7bdd5f46d245 202,205-270
+  s_3090e083f8d04c::t_496d1382044d6f 271
+.roadmap/config.json
+  s_d402dad4387bd5::t_ccb018087f04a0 101
+.roadmap/plans/008-app-store-connect-direct-upload-mcp-tool-upstream-issue-25.md
+  s_d402dad4387bd5::t_550efeda80e9ba 6,24-32
+CHANGELOG.md
+  s_d402dad4387bd5::t_c35af71fdea95d 6
+ROADMAP.md
+  s_d402dad4387bd5::t_41be61f2d788f7 28-29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "36cfe85d8753f282ee5146c9098318b42f32a1a3",
+  "prompts": {},
+  "sessions": {
+    "s_3090e083f8d04c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "eb3b30b3-998d-43e8-bea3-a3296dc96125",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    },
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
