@@ -1,0 +1,33 @@
+.roadmap/config.json
+  s_d402dad4387bd5::t_05dd6d5f3cfc25 4,95-121
+.roadmap/plans/011-publish-own-npm-package-drmxrcy-appscreen-mcp-own-github-pages-frontend-deploy-switch-app-url-default-update-readme-npx-snippets.md
+  s_d402dad4387bd5::t_a22a14bf0ea522 14-15,18-20,23-25
+  s_d402dad4387bd5::t_05dd6d5f3cfc25 1-13,16-17,21-22
+.roadmap/plans/012-screenshot-spec-validation-mcp-tool-check-exports-against-current-app-store-size-requirements-before-upload.md
+  s_d402dad4387bd5::t_a22a14bf0ea522 14-15,18-20,23-24
+  s_d402dad4387bd5::t_05dd6d5f3cfc25 1-13,16-17,21-22
+.roadmap/plans/013-project-as-json-mcp-tools-import-export-project-templates-via-mcp-for-agent-driven-brand-styling.md
+  s_d402dad4387bd5::t_a22a14bf0ea522 14-15,18-20,23-25
+  s_d402dad4387bd5::t_05dd6d5f3cfc25 1-13,16-17,21-22
+CHANGELOG.md
+  s_d402dad4387bd5::t_05dd6d5f3cfc25 3-8
+ROADMAP.md
+  s_d402dad4387bd5::t_05dd6d5f3cfc25 30-34
+  s_d402dad4387bd5::t_a22a14bf0ea522 26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "2c4ea91879b35d2f752a4ff475f0e35aeb21031f",
+  "prompts": {},
+  "sessions": {
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
