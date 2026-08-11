@@ -1,0 +1,46 @@
+index.html
+  s_d402dad4387bd5::t_65d6337b7efd8f 1995-2003
+mcp-bridge.js
+  s_d402dad4387bd5::t_6962090e5fa1de 277
+  s_d402dad4387bd5::t_e138016a694316 702,704-705,707-708
+  s_d402dad4387bd5::t_7978ca4b27c752 259-262
+  s_d402dad4387bd5::t_028dab53279f06 234-240
+  s_d402dad4387bd5::t_deb7e042d46871 715,717
+  s_d402dad4387bd5::t_df4cc3567f00a8 288-290
+app.js
+  s_d402dad4387bd5::t_54d9d4653cf5a3 8404,8407-8414,8424,8426-8427,8434,8442-8447
+  s_d402dad4387bd5::t_4c66b99974d20b 6074-6077
+  s_d402dad4387bd5::t_5e4bef084f334a 8601-8603,8606
+  s_d402dad4387bd5::t_185508c9c80dbc 6052-6057
+  s_d402dad4387bd5::t_52737b29875efe 4222-4229
+  s_d402dad4387bd5::t_69a917192e8549 8405-8406
+  s_d402dad4387bd5::t_e272bd91ebdfc0 8528-8530,8532
+mcp-server/src/index.ts
+  s_d402dad4387bd5::t_08dc73c2bbe259 634
+  s_d402dad4387bd5::t_eff96ec6a81bde 617
+  s_d402dad4387bd5::t_a8f590d02896ce 614
+.roadmap/config.json
+  s_d402dad4387bd5::t_549cdd27ec05f2 101
+.roadmap/plans/006-jpg-export-with-format-switching-upstream-pr-34.md
+  s_d402dad4387bd5::t_76312eb484e7c2 6,24-26
+CHANGELOG.md
+  s_d402dad4387bd5::t_8677282adc24e5 14
+ROADMAP.md
+  s_d402dad4387bd5::t_508c977eafd177 23,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "2c9df2eff972d246133419bbc4bbf8848b5c2759",
+  "prompts": {},
+  "sessions": {
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
