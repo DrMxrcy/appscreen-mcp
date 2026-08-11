@@ -1,0 +1,25 @@
+.roadmap/config.json
+  s_d402dad4387bd5::t_b57d81825d5a4f 101
+.roadmap/plans/003-fix-per-language-text-layout-state-upstream-pr-11.md
+  s_d402dad4387bd5::t_e13a0b6143f94b 6,23-33
+CHANGELOG.md
+  s_d402dad4387bd5::t_ee941704424c76 22
+ROADMAP.md
+  s_d402dad4387bd5::t_d27e467b356767 17,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "5a929c3d120258a16c3b2a9a900213e69498d9be",
+  "prompts": {},
+  "sessions": {
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
