@@ -168,7 +168,9 @@
     }
 
     async function settleRender() {
-        updateCanvas();
+        // Prefer the synchronous render path (rAF-batched updateCanvas defers a frame)
+        if (typeof updateCanvasNow === 'function') updateCanvasNow();
+        else updateCanvas();
         await wait(RENDER_SETTLE_MS);
     }
 

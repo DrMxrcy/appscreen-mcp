@@ -17,7 +17,7 @@
 ## v1.0.1 — (in progress)
 
 ### 🐛 Fixed
-- (pending) Editing stays fast and responsive even with many screenshots in a project
+- Editing stays fast and responsive even with many screenshots in a project
 - (pending) Background images now save reliably on every screenshot
 - (pending) Text position and style no longer get mixed up when switching languages
 - (pending) Exported images are always accepted by App Store Connect, no transparency errors

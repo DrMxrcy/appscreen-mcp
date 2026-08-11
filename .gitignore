@@ -31,3 +31,4 @@ frontend-dist/
 
 # Full internal dev log (public notes stay in CHANGELOG.md)
 CHANGELOG.internal.md
+.playwright-mcp/

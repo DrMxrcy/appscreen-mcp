@@ -97,5 +97,6 @@
   "settings": {
     "autoCommit": true,
     "gitTagOnRelease": false
-  }
+  },
+  "last_seen_sha": "349d19d54a722ef7387c66f14e3fdee29293a63b"
 }

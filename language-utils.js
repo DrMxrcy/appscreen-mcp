@@ -205,6 +205,7 @@ function addLocalizedImage(screenshotIndex, lang, image, src, name) {
     }
 
     // Update displays
+    if (typeof invalidateSidePreviewCache === 'function') invalidateSidePreviewCache(screenshotIndex);
     updateScreenshotList();
     updateCanvas();
     saveState();
@@ -222,6 +223,7 @@ function removeLocalizedImage(screenshotIndex, lang) {
     delete screenshot.localizedImages[lang];
 
     // Update displays
+    if (typeof invalidateSidePreviewCache === 'function') invalidateSidePreviewCache(screenshotIndex);
     updateScreenshotList();
     updateCanvas();
     saveState();
