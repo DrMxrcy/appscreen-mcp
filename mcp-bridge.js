@@ -553,12 +553,18 @@
             });
         },
 
-        async setText({ index = state.selectedIndex, headline, subheadline, settings = {}, language = null } = {}) {
+        async setText({ index = state.selectedIndex, headline, subheadline, settings = {}, language = null, align } = {}) {
             return invoke('setText', async () => {
                 const s = ensureScreenshot(index);
                 s.text = normalizeTextSettings(s.text);
                 setTextMaps(s.text, { headline, subheadline, language });
                 deepMerge(s.text, settings || {});
+                if (align !== undefined) {
+                    if (!['left', 'center', 'right'].includes(align)) {
+                        throw new Error(`Invalid align "${align}". Expected left, center, or right.`);
+                    }
+                    s.text.align = align;
+                }
                 if (headline !== undefined) s.text.headlineEnabled = true;
                 if (subheadline !== undefined) s.text.subheadlineEnabled = true;
                 const activeLanguage = language || Object.keys(normalizeLanguageTextMap(headline || subheadline || {}, state.currentLanguage))[0];

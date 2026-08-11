@@ -77,6 +77,7 @@ const state = {
             },
             currentLayoutLang: 'en',
             position: 'top',
+            align: 'center',
             offsetY: 12,
             lineHeight: 110,
             subheadlineEnabled: false,
@@ -2103,6 +2104,7 @@ function resetStateToDefaults() {
             },
             currentLayoutLang: 'en',
             position: 'top',
+            align: 'center',
             offsetY: 12,
             lineHeight: 110,
             subheadlineEnabled: false,
@@ -2455,6 +2457,9 @@ function syncUIWithState() {
     });
     document.querySelectorAll('#text-position button').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.position === layoutSettings.position);
+    });
+    document.querySelectorAll('#text-align button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.align === (txt.align || 'center'));
     });
     document.getElementById('text-offset-y').value = layoutSettings.offsetY;
     document.getElementById('text-offset-y-value').textContent = formatValue(layoutSettings.offsetY) + '%';
@@ -4729,6 +4734,15 @@ function setupEventListeners() {
         });
     });
 
+    document.querySelectorAll('#text-align button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#text-align button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            setTextValue('align', btn.dataset.align);
+            updateCanvas();
+        });
+    });
+
     document.getElementById('text-offset-y').addEventListener('input', (e) => {
         setTextLanguageValue('offsetY', parseInt(e.target.value));
         document.getElementById('text-offset-y-value').textContent = formatValue(e.target.value) + '%';
@@ -6178,6 +6192,9 @@ function updateTextUI(text) {
     document.querySelectorAll('#text-position button').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.position === layoutSettings.position);
     });
+    document.querySelectorAll('#text-align button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.align === (text.align || 'center'));
+    });
     document.getElementById('text-offset-y').value = layoutSettings.offsetY;
     document.getElementById('text-offset-y-value').textContent = formatValue(layoutSettings.offsetY) + '%';
     document.getElementById('line-height').value = layoutSettings.lineHeight;
@@ -7606,7 +7623,9 @@ function drawTextToContext(context, dims, txt) {
         ? dims.height * (layoutSettings.offsetY / 100)
         : dims.height * (1 - layoutSettings.offsetY / 100);
 
-    context.textAlign = 'center';
+    const align = txt.align || 'center';
+    const anchorX = align === 'left' ? padding : align === 'right' ? dims.width - padding : dims.width / 2;
+    context.textAlign = align;
     context.textBaseline = layoutSettings.position === 'top' ? 'top' : 'bottom';
 
     // Apply text shadow if enabled
@@ -7637,13 +7656,13 @@ function drawTextToContext(context, dims, txt) {
         lines.forEach((line, i) => {
             const y = currentY + i * lineHeight;
             lastLineY = y;
-            context.fillText(line, dims.width / 2, y);
+            context.fillText(line, anchorX, y);
 
             // Calculate text metrics for decorations
             const textWidth = context.measureText(line).width;
             const fontSize = headlineLayout.headlineSize;
             const lineThickness = Math.max(2, fontSize * 0.05);
-            const x = dims.width / 2 - textWidth / 2;
+            const x = align === 'left' ? anchorX : align === 'right' ? anchorX - textWidth : anchorX - textWidth / 2;
 
             // Draw underline
             if (txt.headlineUnderline) {
@@ -7694,13 +7713,13 @@ function drawTextToContext(context, dims, txt) {
 
         lines.forEach((line, i) => {
             const y = subY + i * subLineHeight;
-            context.fillText(line, dims.width / 2, y);
+            context.fillText(line, anchorX, y);
 
             // Calculate text metrics for decorations
             const textWidth = context.measureText(line).width;
             const fontSize = subheadlineLayout.subheadlineSize;
             const lineThickness = Math.max(2, fontSize * 0.05);
-            const x = dims.width / 2 - textWidth / 2;
+            const x = align === 'left' ? anchorX : align === 'right' ? anchorX - textWidth : anchorX - textWidth / 2;
 
             // Draw underline (using 'top' baseline for subheadline)
             if (txt.subheadlineUnderline) {
@@ -8217,7 +8236,9 @@ function drawText() {
         ? dims.height * (layoutSettings.offsetY / 100)
         : dims.height * (1 - layoutSettings.offsetY / 100);
 
-    ctx.textAlign = 'center';
+    const align = text.align || 'center';
+    const anchorX = align === 'left' ? padding : align === 'right' ? dims.width - padding : dims.width / 2;
+    ctx.textAlign = align;
     ctx.textBaseline = layoutSettings.position === 'top' ? 'top' : 'bottom';
 
     // Apply text shadow if enabled
@@ -8247,14 +8268,14 @@ function drawText() {
         lines.forEach((line, i) => {
             const y = currentY + i * lineHeight;
             lastLineY = y;
-            ctx.fillText(line, dims.width / 2, y);
+            ctx.fillText(line, anchorX, y);
 
             // Calculate text metrics for decorations
             // When textBaseline is 'top', y is at top of text; when 'bottom', y is at bottom
             const textWidth = ctx.measureText(line).width;
             const fontSize = headlineLayout.headlineSize;
             const lineThickness = Math.max(2, fontSize * 0.05);
-            const x = dims.width / 2 - textWidth / 2;
+            const x = align === 'left' ? anchorX : align === 'right' ? anchorX - textWidth : anchorX - textWidth / 2;
 
             // Draw underline
             if (text.headlineUnderline) {
@@ -8305,13 +8326,13 @@ function drawText() {
 
         lines.forEach((line, i) => {
             const y = subY + i * subLineHeight;
-            ctx.fillText(line, dims.width / 2, y);
+            ctx.fillText(line, anchorX, y);
 
             // Calculate text metrics for decorations
             const textWidth = ctx.measureText(line).width;
             const fontSize = subheadlineLayout.subheadlineSize;
             const lineThickness = Math.max(2, fontSize * 0.05);
-            const x = dims.width / 2 - textWidth / 2;
+            const x = align === 'left' ? anchorX : align === 'right' ? anchorX - textWidth : anchorX - textWidth / 2;
 
             // Draw underline (using 'top' baseline for subheadline)
             if (text.subheadlineUnderline) {

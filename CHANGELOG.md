@@ -7,12 +7,12 @@
 - (pending) Run the whole screenshot generator and its automation server on your own infrastructure
 - (pending) Translate marketing text with a local AI model, fully offline and free
 
-## v1.1.0 — (in progress)
+## v1.1.0 — 2026-08-11
 
 ### ✨ New
 - Type exact hex color codes anywhere you pick a color
 - Export screenshots as JPG or PNG, whichever your workflow needs
-- (pending) Align headlines and subheadlines left, center, or right
+- Align headlines and subheadlines left, center, or right
 
 ## v1.0.1 — 2026-08-11
 

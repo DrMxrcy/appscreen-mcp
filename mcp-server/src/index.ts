@@ -412,6 +412,10 @@ Example:
       .string()
       .optional()
       .describe('Language code to use when headline/subheadline are plain strings. Example: en.'),
+    align: z
+      .enum(['left', 'center', 'right'])
+      .optional()
+      .describe('Horizontal alignment of headline and subheadline. Defaults to center.'),
     settings: textSettingsSchema.default({}),
   },
   async (args) => bridge('setText', args),

@@ -3,7 +3,7 @@ id: 7
 title: Text alignment options (upstream issue #29)
 type: feature
 version: 1.1.0
-status: planned
+status: done
 created: 2026-08-11
 ---
 
@@ -21,6 +21,6 @@ created: 2026-08-11
 - **Downstream impact:** multi-language text and per-screenshot text settings must both carry the field; MCP set-text tool gains optional align param
 
 ## 🚶 Step-by-Step Checklist
-- [ ] Step 1: Add align state + UI toggle -> target: app.js, index.html
-- [ ] Step 2: Apply alignment in drawText (anchor x: padding / center / width-padding) -> target: app.js
-- [ ] Step 3: Expose align via MCP text tool; verify old projects load with default center -> target: mcp-bridge.js, mcp-server/src/index.ts
+- [x] Step 1: Add align state + UI toggle -> target: app.js, index.html
+- [x] Step 2: Apply alignment in drawText (anchor x: padding / center / width-padding) -> target: app.js
+- [x] Step 3: Expose align via MCP text tool; verify old projects load with default center -> target: mcp-bridge.js, mcp-server/src/index.ts
