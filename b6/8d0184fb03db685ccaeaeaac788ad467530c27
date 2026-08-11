@@ -1,0 +1,73 @@
+.gitignore
+  s_d402dad4387bd5::t_5e1e401fec4e68 13-17
+mcp-server/.dockerignore
+  s_d402dad4387bd5::t_db1bdbfd596224 9-12
+  s_d402dad4387bd5::t_b01b5c7b7d42ac 1-8
+mcp-server/src/index.ts
+  s_d402dad4387bd5::t_42b27ffcc2cba7 37-53
+  s_d402dad4387bd5::t_807e3a759f4752 752-763
+  s_d402dad4387bd5::t_775570a6d72ad9 4
+  s_d402dad4387bd5::t_c22b64d879b598 222-230
+mcp-server/src/http.ts
+  s_d402dad4387bd5::t_d25084405a50b1 1-15,22-31,41-79,81,83-84,90-93,97-98,124-143,145-154,170-217,228-236,240-250,252-254,256-258,263,266-288
+  s_d402dad4387bd5::t_22ff8dfb5328c9 218-227
+  s_d402dad4387bd5::t_abfcc819a3356d 255,259-262,264-265
+  s_d402dad4387bd5::t_31fccbdf0802ce 16-21,32-40
+  s_d402dad4387bd5::t_b0c491ea1e10a2 155-169
+  s_d402dad4387bd5::t_39aba74fd9b4ea 144
+  s_d402dad4387bd5::t_889148c74412dc 251
+  s_d402dad4387bd5::t_7a475156382002 80,82,85-89,94-96,99-123
+  s_d402dad4387bd5::t_0d3a6f837a125a 237-239
+docker-compose.build.yml
+  s_d402dad4387bd5::t_3f076340f237e8 25-69
+  s_d402dad4387bd5::t_505e792b5bb8fb 19
+mcp-server/Dockerfile
+  s_d402dad4387bd5::t_2f192552c4cdfa 1-20,24,26,28-29,32-33,38-49
+  s_d402dad4387bd5::t_f5d5ad749343eb 21-23,25,27,30-31
+  s_d402dad4387bd5::t_8dd64bc244f8c0 34-37
+docker-compose.yml
+  s_d402dad4387bd5::t_505e792b5bb8fb 16
+  s_d402dad4387bd5::t_247daacb6f693d 22-67
+.dockerignore
+  s_d402dad4387bd5::t_db1bdbfd596224 38-41
+mcp-server/README.md
+  s_d402dad4387bd5::t_0b71b460bf9b89 81-82
+  s_d402dad4387bd5::t_9bcaf866028b7e 329-421,423
+  s_d402dad4387bd5::t_e62265c2a0a9da 70-80,83
+  s_d402dad4387bd5::t_3a0e77cc656171 422
+  s_90b9f1824c3c35::t_92a81dccc7fab2 424
+Dockerfile
+  s_d402dad4387bd5::t_4828af8d47b683 36-38
+.roadmap/config.json
+  s_d402dad4387bd5::t_dc290ea59eeaff 155
+.roadmap/plans/009-http-transport-and-self-hosted-mcp-stack.md
+  s_d402dad4387bd5::t_f6d35eedb8a42b 6,24-26
+CHANGELOG.md
+  s_d402dad4387bd5::t_d97c17a414cc35 15
+ROADMAP.md
+  s_d402dad4387bd5::t_71de5d0bf12181 24,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "b68d0184fb03db685ccaeaeaac788ad467530c27",
+  "prompts": {},
+  "sessions": {
+    "s_90b9f1824c3c35": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8154ad57-9cf2-4a9d-b8cd-b62eb48f4ecf",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    },
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
