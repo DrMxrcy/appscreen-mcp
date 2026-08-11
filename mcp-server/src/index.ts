@@ -7,6 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { chromium, type BrowserContext, type Page } from 'playwright';
 import { z } from 'zod';
+import { SCREENSHOT_DISPLAY_TYPES, uploadScreenshots } from './asc-upload.js';
 
 const DEFAULT_APP_URL = process.env.APPSCREEN_URL ?? 'https://appsolves.github.io/appscreen-mcp/';
 const OUTPUT_DIR =
@@ -674,6 +675,42 @@ registerTool(
     const outputPath = saveToFile ? await saveBase64Artifact(exported.base64, fileName ?? exported.fileName, exported.mimeType) : undefined;
     return { ...exported, outputPath };
   },
+);
+
+registerTool(
+  'appscreen_upload_to_app_store',
+  `Upload finished screenshots to App Store Connect for one app, one locale and one device display type, using Apple's official App Store Connect API.
+
+Credentials (an App Store Connect API key you create yourself under Users and Access > Integrations > App Store Connect API):
+- keyId / issuerId / privateKeyPath may be passed explicitly, or omitted to fall back to the environment: ASC_KEY_ID, ASC_ISSUER_ID, and ASC_PRIVATE_KEY_PATH (path to your .p8 file) or ASC_PRIVATE_KEY (the .p8 PEM contents).
+- The private key never leaves this machine; it is only used locally to sign a short-lived ES256 JWT.
+
+Behaviour:
+- dryRun defaults to TRUE. A dry run authenticates, finds the editable App Store version, the locale's localization and the screenshot set, validates every file (format, alpha channel, exact pixel size), and reports what WOULD be uploaded without reserving or uploading anything. Pass dryRun: false to actually upload.
+- Append-only: existing screenshots are never deleted or replaced. The result reports the existing screenshot count. Apple's limit is 10 per set.
+- Files must be PNG or JPEG with no transparency, at an exact size valid for the chosen displayType.`,
+  {
+    keyId: z.string().min(1).optional().describe('App Store Connect API Key ID. Falls back to ASC_KEY_ID.'),
+    issuerId: z.string().min(1).optional().describe('App Store Connect Issuer ID. Falls back to ASC_ISSUER_ID.'),
+    privateKeyPath: z
+      .string()
+      .min(1)
+      .optional()
+      .describe('Path to the .p8 private key file. Falls back to ASC_PRIVATE_KEY_PATH, then ASC_PRIVATE_KEY.'),
+    appId: z.string().min(1).describe('App Store Connect app id (the numeric Apple ID of the app).'),
+    locale: z.string().min(2).describe('App Store locale of the localization to update, e.g. "en-US" or "de-DE".'),
+    displayType: z
+      .enum(SCREENSHOT_DISPLAY_TYPES)
+      .describe(
+        'Device screenshot slot. Note the names lag Apple marketing names: APP_IPHONE_67 is the 6.9" iPhone slot (1320x2868), APP_IPHONE_61 is the 6.3" slot, APP_IPAD_PRO_3GEN_129 is the 13" iPad slot (2064x2752).',
+      ),
+    files: z.array(z.string().min(1)).min(1).describe('Absolute or relative paths to the screenshot files, in display order.'),
+    dryRun: z
+      .boolean()
+      .default(true)
+      .describe('Defaults to true. Must be explicitly set to false to actually upload to App Store Connect.'),
+  },
+  async (args) => uploadScreenshots(args),
 );
 
 registerTool(

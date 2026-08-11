@@ -25,8 +25,8 @@
 - [x] **#6 JPG export with format switching (upstream PR #34)** `feature` — 100% ([plan](.roadmap/plans/006-jpg-export-with-format-switching-upstream-pr-34.md))
 - [x] **#7 Text alignment options (upstream issue #29)** `feature` — 100% ([plan](.roadmap/plans/007-text-alignment-options-upstream-issue-29.md))
 
-### [ ] v1.2.0 — 0%
-- [ ] **#8 App Store Connect direct upload MCP tool (upstream issue #25)** `feature` — 0% ([plan](.roadmap/plans/008-app-store-connect-direct-upload-mcp-tool-upstream-issue-25.md))
+### [ ] v1.2.0 — 40%
+- [x] **#8 App Store Connect direct upload MCP tool (upstream issue #25)** `feature` — 100% ([plan](.roadmap/plans/008-app-store-connect-direct-upload-mcp-tool-upstream-issue-25.md))
 - [ ] **#9 HTTP transport and self-hosted MCP stack** `feature` — 0% ([plan](.roadmap/plans/009-http-transport-and-self-hosted-mcp-stack.md))
 - [ ] **#10 Ollama local model support for AI translations (upstream PR #7)** `feature` — 0% ([plan](.roadmap/plans/010-ollama-local-model-support-for-ai-translations-upstream-pr-7.md))
 <!-- roadmap:auto:end -->

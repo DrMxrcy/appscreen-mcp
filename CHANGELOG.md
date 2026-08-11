@@ -3,7 +3,7 @@
 ## v1.2.0 — (in progress)
 
 ### ✨ New
-- (pending) Push finished screenshots straight to App Store Connect without leaving your workflow
+- Push finished screenshots straight to App Store Connect without leaving your workflow
 - (pending) Run the whole screenshot generator and its automation server on your own infrastructure
 - (pending) Translate marketing text with a local AI model, fully offline and free
 

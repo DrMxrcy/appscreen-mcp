@@ -199,7 +199,75 @@ For local development from a cloned repository:
 - `appscreen_export_current_png`
 - `appscreen_export_all_zip`
 - `appscreen_demo_run_cable_launch_recipe`
+- `appscreen_upload_to_app_store`
 - `appscreen_raw_bridge_call`
+
+## Uploading to App Store Connect
+
+`appscreen_upload_to_app_store` uploads finished screenshots to Apple using the official
+App Store Connect API. It appends to the screenshot set for one app, one locale and one
+device display type — it never deletes or replaces existing screenshots.
+
+### 1. Create an API key
+
+In [App Store Connect](https://appstoreconnect.apple.com) go to **Users and Access →
+Integrations → App Store Connect API**, create a key with the **App Manager** role, then note:
+
+- the **Key ID** (e.g. `2X9R4HXF34`),
+- the **Issuer ID** shown above the key list (a UUID),
+- and download the `.p8` private key file. Apple lets you download it **once** — store it
+  somewhere private (e.g. `~/.appstoreconnect/private_keys/AuthKey_2X9R4HXF34.p8`, mode `600`).
+
+### 2. Environment variables
+
+| Variable | Required | Description |
+|---|---:|---|
+| `ASC_KEY_ID` | Yes | App Store Connect API Key ID. Overridden by the tool's `keyId` argument. |
+| `ASC_ISSUER_ID` | Yes | Issuer ID (UUID). Overridden by the tool's `issuerId` argument. |
+| `ASC_PRIVATE_KEY_PATH` | Yes\* | Path to the downloaded `.p8` file. Overridden by the tool's `privateKeyPath` argument. |
+| `ASC_PRIVATE_KEY` | Yes\* | Alternative to the path: the `.p8` PEM contents inline. |
+
+\* Provide either `ASC_PRIVATE_KEY_PATH` or `ASC_PRIVATE_KEY`.
+
+**Your private key stays on your machine.** It is read locally, used only to sign a
+short-lived (10 minute) ES256 JWT, and is never logged, never returned in a tool result, and
+never transmitted — only the resulting signed JWT is sent to Apple, exactly as the API requires.
+Don't commit the `.p8` file, and don't paste the key into a chat.
+
+### 3. Dry run first
+
+`dryRun` defaults to `true`. A dry run authenticates, resolves the editable App Store version,
+the locale's localization and the screenshot set, and validates every file locally — format
+(PNG/JPEG), no alpha channel, and exact pixel dimensions for the display type — then reports what
+*would* be uploaded without reserving or transferring anything. Read that report, then re-run with
+`dryRun: false` to commit.
+
+```jsonc
+// 1. dry run (default)
+{
+  "name": "appscreen_upload_to_app_store",
+  "arguments": {
+    "appId": "1234567890",
+    "locale": "en-US",
+    "displayType": "APP_IPHONE_67",
+    "files": [
+      "/Users/me/AppScreenMCP/outputs/en-US/01.png",
+      "/Users/me/AppScreenMCP/outputs/en-US/02.png"
+    ]
+  }
+}
+
+// 2. same call plus "dryRun": false to actually upload
+```
+
+Notes:
+
+- `displayType` names lag Apple's marketing names: `APP_IPHONE_67` is today's **6.9"** iPhone
+  slot (1320×2868), `APP_IPHONE_61` is the **6.3"** slot, `APP_IPAD_PRO_3GEN_129` is the **13"**
+  iPad slot (2064×2752).
+- The app needs a version in an editable state (e.g. *Prepare for Submission*) before uploading.
+- Apple allows at most 10 screenshots per set; the tool reports the existing count and refuses to
+  exceed the limit rather than deleting anything.
 
 ## Recommended workflow for agents
 
