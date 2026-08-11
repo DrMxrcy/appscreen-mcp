@@ -1,0 +1,42 @@
+llm.js
+  s_d402dad4387bd5::t_883ff119788279 42-50,54-101
+  s_d402dad4387bd5::t_09248d2b3a6eeb 102
+index.html
+  s_d402dad4387bd5::t_ccafc46d64cc93 1890-1893
+  s_d402dad4387bd5::t_6eab8c83d6b957 1998-2037
+app.js
+  s_d402dad4387bd5::t_91ddb57ceea9f0 5400,5402
+  s_d402dad4387bd5::t_c6028e98e44371 5715,5717
+  s_d402dad4387bd5::t_1bfdae94fd2227 6195-6196,6198-6208,6210-6220
+  s_d402dad4387bd5::t_4a7def09126b5b 6069-6082
+  s_d402dad4387bd5::t_dfc8311deca3b5 5457-5458,5855-5856
+  s_d402dad4387bd5::t_d1f49ad9242e7c 4253-4256
+  s_d402dad4387bd5::t_58a4d57f31c891 6012-6030
+  s_d402dad4387bd5::t_36a1a928a9c472 6140
+  s_d402dad4387bd5::t_2dd0f1922751ab 6226
+  s_d402dad4387bd5::t_86c6dd062bd94d 6133-6139,6141-6173
+.roadmap/config.json
+  s_d402dad4387bd5::t_914db6a387435b 155
+.roadmap/plans/010-ollama-local-model-support-for-ai-translations-upstream-pr-7.md
+  s_d402dad4387bd5::t_4215e3e4e9152d 6,24-26
+CHANGELOG.md
+  s_d402dad4387bd5::t_570a54dad4d4f5 16
+ROADMAP.md
+  s_d402dad4387bd5::t_6dbb11854bce7f 23,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "584131029df1f0565b1ffc73847f44cb274fdf6e",
+  "prompts": {},
+  "sessions": {
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "unknown"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
