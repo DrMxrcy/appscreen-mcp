@@ -90,7 +90,15 @@ const state = {
             subheadlineUnderline: false,
             subheadlineStrikethrough: false,
             subheadlineColor: '#ffffff',
-            subheadlineOpacity: 70
+            subheadlineOpacity: 70,
+            shadow: {
+                enabled: false,
+                color: '#000000',
+                blur: 10,
+                opacity: 50,
+                x: 0,
+                y: 4
+            }
         },
         elements: [],
         popouts: []
@@ -636,6 +644,10 @@ function setCurrentScreenshotAsDefault() {
     const screenshot = getCurrentScreenshot();
     if (screenshot) {
         state.defaults.background = JSON.parse(JSON.stringify(screenshot.background));
+        // Preserve Image object (not JSON serializable)
+        if (screenshot.background.image) {
+            state.defaults.background.image = screenshot.background.image;
+        }
         state.defaults.screenshot = JSON.parse(JSON.stringify(screenshot.screenshot));
         state.defaults.text = JSON.parse(JSON.stringify(screenshot.text));
     }
@@ -1564,7 +1576,7 @@ function saveState() {
             name: s.name,
             deviceType: s.deviceType,
             localizedImages: localizedImages,
-            background: s.background,
+            background: { ...s.background, image: undefined }, // Don't serialize Image object
             screenshot: s.screenshot,
             text: textToSave,
             elements: (s.elements || []).map(el => ({
@@ -1586,7 +1598,11 @@ function saveState() {
         customHeight: state.customHeight,
         currentLanguage: state.currentLanguage,
         projectLanguages: state.projectLanguages,
-        defaults: { ...state.defaults, text: (({ _normalized, ...rest }) => rest)(state.defaults.text || {}) }
+        defaults: {
+            ...state.defaults,
+            background: { ...state.defaults.background, image: undefined }, // live Image is not structured-cloneable
+            text: (({ _normalized, ...rest }) => rest)(state.defaults.text || {})
+        }
     };
 
     // Update screenshot count in project metadata
@@ -1622,6 +1638,21 @@ function migrate3DPosition(screenshotSettings) {
 
     screenshotSettings.x = Math.max(0, Math.min(100, 50 + (oldX - 50) * xFactor));
     screenshotSettings.y = Math.max(0, Math.min(100, 50 + (oldY - 50) * yFactor));
+}
+
+// Reconstruct background Image object from stored imageSrc data URL.
+// `index` is the screenshot index, so the cached side preview can be dropped
+// once the image lands (omit it to invalidate every cached preview).
+function reconstructBackgroundImage(background, index) {
+    if (background && background.imageSrc && !background.image) {
+        const img = new Image();
+        img.onload = () => {
+            background.image = img;
+            invalidateSidePreviewCache(index);
+            updateCanvas();
+        };
+        img.src = background.imageSrc;
+    }
 }
 
 // Reconstruct Image objects for graphic/icon elements from saved data
@@ -1724,6 +1755,7 @@ function loadState() {
                                     popouts: s.popouts || [],
                                     overrides: s.overrides || {}
                                 };
+                                reconstructBackgroundImage(state.screenshots[index].background, index);
                                 loadedCount++;
                                 checkAllLoaded();
                             } else if (hasLocalizedImages) {
@@ -1763,6 +1795,7 @@ function loadState() {
                                                     popouts: s.popouts || [],
                                                     overrides: s.overrides || {}
                                                 };
+                                                reconstructBackgroundImage(state.screenshots[index].background, index);
                                                 loadedCount++;
                                                 checkAllLoaded();
                                             }
@@ -1808,6 +1841,7 @@ function loadState() {
                                         popouts: s.popouts || [],
                                         overrides: s.overrides || {}
                                     };
+                                    reconstructBackgroundImage(state.screenshots[index].background, index);
                                     loadedCount++;
                                     checkAllLoaded();
                                 };
@@ -1981,7 +2015,15 @@ function resetStateToDefaults() {
             subheadlineUnderline: false,
             subheadlineStrikethrough: false,
             subheadlineColor: '#ffffff',
-            subheadlineOpacity: 70
+            subheadlineOpacity: 70,
+            shadow: {
+                enabled: false,
+                color: '#000000',
+                blur: 10,
+                opacity: 50,
+                x: 0,
+                y: 4
+            }
         }
     };
 }
@@ -2233,6 +2275,16 @@ function syncUIWithState() {
     document.getElementById('solid-color-hex').value = bg.solid;
 
     // Image background
+    const bgImagePreview = document.getElementById('bg-image-preview');
+    if (bg.imageSrc) {
+        bgImagePreview.src = bg.imageSrc;
+        bgImagePreview.style.display = 'block';
+        // Rebuild the Image object if it was lost (persistence round-trip, deep copy)
+        reconstructBackgroundImage(bg);
+    } else {
+        bgImagePreview.src = '';
+        bgImagePreview.style.display = 'none';
+    }
     document.getElementById('bg-image-fit').value = bg.imageFit;
     document.getElementById('bg-blur').value = bg.imageBlur;
     document.getElementById('bg-blur-value').textContent = formatValue(bg.imageBlur) + 'px';
@@ -2330,6 +2382,23 @@ function syncUIWithState() {
     const subheadlineEnabled = txt.subheadlineEnabled || false;
     document.getElementById('headline-toggle').classList.toggle('active', headlineEnabled);
     document.getElementById('subheadline-toggle').classList.toggle('active', subheadlineEnabled);
+
+    // Text shadow
+    const textShadow = txt.shadow || { enabled: false, color: '#000000', blur: 10, opacity: 50, x: 0, y: 4 };
+    document.getElementById('text-shadow-toggle').classList.toggle('active', textShadow.enabled);
+    const textShadowRow = document.getElementById('text-shadow-toggle').closest('.toggle-row');
+    if (textShadowRow) textShadowRow.classList.toggle('collapsed', !textShadow.enabled);
+    document.getElementById('text-shadow-options').style.display = textShadow.enabled ? 'block' : 'none';
+    document.getElementById('text-shadow-color').value = textShadow.color;
+    document.getElementById('text-shadow-color-hex').value = textShadow.color;
+    document.getElementById('text-shadow-blur').value = textShadow.blur;
+    document.getElementById('text-shadow-blur-value').textContent = formatValue(textShadow.blur) + 'px';
+    document.getElementById('text-shadow-opacity').value = textShadow.opacity;
+    document.getElementById('text-shadow-opacity-value').textContent = formatValue(textShadow.opacity) + '%';
+    document.getElementById('text-shadow-x').value = textShadow.x;
+    document.getElementById('text-shadow-x-value').textContent = formatValue(textShadow.x) + 'px';
+    document.getElementById('text-shadow-y').value = textShadow.y;
+    document.getElementById('text-shadow-y-value').textContent = formatValue(textShadow.y) + 'px';
 
     // Language UIs
     updateHeadlineLanguageUI();
@@ -4328,6 +4397,7 @@ function setupEventListeners() {
                 const img = new Image();
                 img.onload = () => {
                     setBackground('image', img);
+                    setBackground('imageSrc', event.target.result);
                     document.getElementById('bg-image-preview').src = event.target.result;
                     document.getElementById('bg-image-preview').style.display = 'block';
                     updateCanvas();
@@ -4336,6 +4406,8 @@ function setupEventListeners() {
             };
             reader.readAsDataURL(e.target.files[0]);
         }
+        // Reset so the same file can be re-selected
+        e.target.value = '';
     });
 
     document.getElementById('bg-image-fit').addEventListener('change', (e) => {
@@ -4660,6 +4732,47 @@ function setupEventListeners() {
             const newValue = !text[key];
             setTextValue(key, newValue);
             btn.classList.toggle('active', newValue);
+            updateCanvas();
+        });
+    });
+
+    // Text shadow. Text objects normalized before `shadow` existed lack it, so
+    // materialize it on first use rather than assuming it's there.
+    const getTextShadow = () => {
+        const text = getTextSettings();
+        if (!text.shadow) text.shadow = { enabled: false, color: '#000000', blur: 10, opacity: 50, x: 0, y: 4 };
+        return text.shadow;
+    };
+
+    document.getElementById('text-shadow-toggle').addEventListener('click', function () {
+        this.classList.toggle('active');
+        const enabled = this.classList.contains('active');
+        getTextShadow().enabled = enabled;
+        const row = this.closest('.toggle-row');
+        if (row) row.classList.toggle('collapsed', !enabled);
+        document.getElementById('text-shadow-options').style.display = enabled ? 'block' : 'none';
+        updateCanvas();
+    });
+
+    document.getElementById('text-shadow-color').addEventListener('input', (e) => {
+        getTextShadow().color = e.target.value;
+        document.getElementById('text-shadow-color-hex').value = e.target.value;
+        updateCanvas();
+    });
+
+    document.getElementById('text-shadow-color-hex').addEventListener('change', (e) => {
+        if (/^#[0-9a-fA-F]{6}$/.test(e.target.value)) {
+            getTextShadow().color = e.target.value;
+            document.getElementById('text-shadow-color').value = e.target.value;
+            updateCanvas();
+        }
+    });
+
+    [['blur', 'px'], ['opacity', '%'], ['x', 'px'], ['y', 'px']].forEach(([key, unit]) => {
+        document.getElementById('text-shadow-' + key).addEventListener('input', (e) => {
+            const value = parseInt(e.target.value) || 0;
+            getTextShadow()[key] = value;
+            document.getElementById('text-shadow-' + key + '-value').textContent = formatValue(value) + unit;
             updateCanvas();
         });
     });
@@ -7441,6 +7554,14 @@ function drawTextToContext(context, dims, txt) {
     context.textAlign = 'center';
     context.textBaseline = layoutSettings.position === 'top' ? 'top' : 'bottom';
 
+    // Apply text shadow if enabled
+    if (txt.shadow && txt.shadow.enabled) {
+        context.shadowColor = hexToRgba(txt.shadow.color || '#000000', (txt.shadow.opacity || 0) / 100);
+        context.shadowBlur = txt.shadow.blur || 0;
+        context.shadowOffsetX = txt.shadow.x || 0;
+        context.shadowOffsetY = txt.shadow.y || 0;
+    }
+
     let currentY = textY;
 
     // Draw headline
@@ -7543,6 +7664,14 @@ function drawTextToContext(context, dims, txt) {
         if (layoutSettings.position === 'bottom') {
             context.textBaseline = 'bottom';
         }
+    }
+
+    // Clear text shadow
+    if (txt.shadow && txt.shadow.enabled) {
+        context.shadowColor = 'transparent';
+        context.shadowBlur = 0;
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
     }
 }
 
@@ -8036,6 +8165,14 @@ function drawText() {
     ctx.textAlign = 'center';
     ctx.textBaseline = layoutSettings.position === 'top' ? 'top' : 'bottom';
 
+    // Apply text shadow if enabled
+    if (text.shadow && text.shadow.enabled) {
+        ctx.shadowColor = hexToRgba(text.shadow.color || '#000000', (text.shadow.opacity || 0) / 100);
+        ctx.shadowBlur = text.shadow.blur || 0;
+        ctx.shadowOffsetX = text.shadow.x || 0;
+        ctx.shadowOffsetY = text.shadow.y || 0;
+    }
+
     let currentY = textY;
 
     // Draw headline
@@ -8138,6 +8275,14 @@ function drawText() {
         if (layoutSettings.position === 'bottom') {
             ctx.textBaseline = 'bottom';
         }
+    }
+
+    // Clear text shadow
+    if (text.shadow && text.shadow.enabled) {
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
     }
 }
 

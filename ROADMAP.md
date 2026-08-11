@@ -14,9 +14,9 @@
 
 ## 📊 Versions
 
-### [ ] v1.0.1 — 27%
+### [ ] v1.0.1 — 55%
 - [x] **#1 Fix severe slowdown with 5+ screenshots (upstream PR #39)** `bug` — 100% ([plan](.roadmap/plans/001-fix-severe-slowdown-with-5-screenshots-upstream-pr-39.md))
-- [ ] **#2 Fix image background not persisting across multiple screenshots (upstream PR #33)** `bug` — 0% ([plan](.roadmap/plans/002-fix-image-background-not-persisting-across-multiple-screenshots-upstream-pr-33.md))
+- [x] **#2 Fix image background not persisting across multiple screenshots (upstream PR #33)** `bug` — 100% ([plan](.roadmap/plans/002-fix-image-background-not-persisting-across-multiple-screenshots-upstream-pr-33.md))
 - [ ] **#3 Fix per-language text layout state (upstream PR #11)** `bug` — 0% ([plan](.roadmap/plans/003-fix-per-language-text-layout-state-upstream-pr-11.md))
 - [ ] **#4 Flatten alpha channel on PNG export (upstream issue #24)** `bug` — 0% ([plan](.roadmap/plans/004-flatten-alpha-channel-on-png-export-upstream-issue-24.md))
 

@@ -3,7 +3,7 @@ id: 2
 title: Fix image background not persisting across multiple screenshots (upstream PR #33)
 type: bug
 version: 1.0.1
-status: planned
+status: done
 created: 2026-08-11
 ---
 
@@ -20,6 +20,6 @@ created: 2026-08-11
 - **Why:** Image backgrounds stored as runtime Image objects, not persisted per-screenshot.
 
 ## 🛠️ Checklist
-- [ ] Step 1: Fetch upstream PR #33 diff, split persistence fix from text-shadow feature; check whether our fork already reworked this path -> target: analysis note
-- [ ] Step 2: Apply persistence fix (and text shadow if it applies cleanly) to our state save/restore -> target: app.js
-- [ ] Step 3: Verify: set image background, switch screenshots + reload, background survives; export renders it -> target: manual test
+- [x] Step 1: Fetch upstream PR #33 diff, split persistence fix from text-shadow feature; check whether our fork already reworked this path -> target: analysis note
+- [x] Step 2: Apply persistence fix (and text shadow if it applies cleanly) to our state save/restore -> target: app.js
+- [x] Step 3: Verify: set image background, switch screenshots + reload, background survives; export renders it -> target: manual test
