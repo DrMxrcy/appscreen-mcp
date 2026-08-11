@@ -1,0 +1,30 @@
+.roadmap/plans/016-upstream-pr-32-numeric-input-fields-for-range-sliders.md
+  s_d402dad4387bd5::t_65b34727b83c5f 1-24
+CHANGELOG.md
+  s_d402dad4387bd5::t_65b34727b83c5f 8-9,18-19
+  s_d402dad4387bd5::t_a0308c6a3d154c 20
+.roadmap/plans/015-port-upstream-prs-40-41-panorama-background-spanning-ipad-device-diff-check-against-our-37-based-fork-first.md
+  s_d402dad4387bd5::t_65b34727b83c5f 1-25
+.roadmap/plans/014-upstream-pr-26-indexeddb-datacloneerror-guard-take-only-if-bug-reproduces-in-our-fork.md
+  s_d402dad4387bd5::t_65b34727b83c5f 1-24
+.roadmap/config.json
+  s_d402dad4387bd5::t_65b34727b83c5f 4,122-148
+ROADMAP.md
+  s_d402dad4387bd5::t_65b34727b83c5f 23,28,33-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "61a62ddf62b22d902e6bbac8c9540fac7e04657e",
+  "prompts": {},
+  "sessions": {
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
