@@ -1,0 +1,45 @@
+index.html
+  s_d402dad4387bd5::t_ae78c5ff3bc86c 1135-1187
+app.js
+  s_d402dad4387bd5::t_ff3baa015afe22 1601-1605
+  s_d402dad4387bd5::t_68d5334f633964 93-101
+  s_d402dad4387bd5::t_3bd2c9e9f61dad 1798
+  s_d402dad4387bd5::t_23e08982ce6ca9 7668-7675
+  s_d402dad4387bd5::t_3e7c66af503d04 4400,4409-4410
+  s_d402dad4387bd5::t_3f3904bbf4f590 2386-2402
+  s_d402dad4387bd5::t_b9af60d8782b6d 4739-4779
+  s_d402dad4387bd5::t_5f83a055f6ec81 1643-1657
+  s_d402dad4387bd5::t_f2127a0ca47b8d 8168-8175
+  s_d402dad4387bd5::t_ad96073f12cc42 1844
+  s_d402dad4387bd5::t_a6672e3ab9a1c2 1758
+  s_d402dad4387bd5::t_a474c9bb953530 7557-7564
+  s_d402dad4387bd5::t_7ce3381530a40f 2278-2287
+  s_d402dad4387bd5::t_f6d55012f8b752 2018-2026
+  s_d402dad4387bd5::t_e9461d90dcbf25 1579
+  s_d402dad4387bd5::t_11843c8501a6e4 647-650
+  s_d402dad4387bd5::t_96840dfb6dfc23 8279-8286
+.roadmap/config.json
+  s_d402dad4387bd5::t_c5a82ed9102050 101
+.roadmap/plans/002-fix-image-background-not-persisting-across-multiple-screenshots-upstream-pr-33.md
+  s_d402dad4387bd5::t_822f95fa77fa4e 6,23-25
+CHANGELOG.md
+  s_d402dad4387bd5::t_ffaecd917a6a68 21
+ROADMAP.md
+  s_d402dad4387bd5::t_bd072ca5a6648c 17,19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "008b2176a45092ebfc441c75fe7e91c0355ae6d7",
+  "prompts": {},
+  "sessions": {
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
