@@ -5,6 +5,8 @@
 ### ✨ New
 - (pending) Check screenshots against current App Store size rules before uploading, so rejections never happen
 - (pending) Save and reuse whole project styles as templates through the automation interface
+- (pending) iPad device mockups and backgrounds that span across all screenshots
+- (pending) Type exact values next to every slider instead of dragging
 
 ## v1.2.0 — (in progress)
 
@@ -12,6 +14,9 @@
 - Push finished screenshots straight to App Store Connect without leaving your workflow
 - (pending) Run the whole screenshot generator and its automation server on your own infrastructure
 - (pending) Translate marketing text with a local AI model, fully offline and free
+
+### 🐛 Fixed
+- (pending) Projects save reliably even when older data contains unsaveable objects
 
 ## v1.1.0 — 2026-08-11
 

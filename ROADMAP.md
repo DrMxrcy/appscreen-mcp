@@ -2,9 +2,6 @@
 
 ## 💡 Idea Incubator
 - Upstream issue #28: cross-screen screenshot overflow (one design spanning multiple store slots) — big visual differentiator
-- Upstream PR #26: IndexedDB DataCloneError guard — take only if bug reproduces in our fork
-- Upstream PR #32: numeric input fields for range sliders (big diff, conflict-prone)
-- Port upstream PRs #40/#41 (panorama background spanning + iPad device) — diff-check against our #37-based fork first
 <!-- Free-form; sync never rewrites this region. ONE bullet per idea (`roadmap.py idea`).
      Long write-ups (brainstorms, review findings) go to .roadmap/notes/ files and get linked. -->
 <!-- roadmap:auto:start -->
@@ -23,13 +20,16 @@
 - [x] **#6 JPG export with format switching (upstream PR #34)** `feature` — 100% ([plan](.roadmap/plans/006-jpg-export-with-format-switching-upstream-pr-34.md))
 - [x] **#7 Text alignment options (upstream issue #29)** `feature` — 100% ([plan](.roadmap/plans/007-text-alignment-options-upstream-issue-29.md))
 
-### [ ] v1.2.0 — 31%
+### [ ] v1.2.0 — 27%
 - [x] **#8 App Store Connect direct upload MCP tool (upstream issue #25)** `feature` — 100% ([plan](.roadmap/plans/008-app-store-connect-direct-upload-mcp-tool-upstream-issue-25.md))
 - [ ] **#9 HTTP transport and self-hosted MCP stack** `feature` — 0% ([plan](.roadmap/plans/009-http-transport-and-self-hosted-mcp-stack.md))
 - [ ] **#10 Ollama local model support for AI translations (upstream PR #7)** `feature` — 0% ([plan](.roadmap/plans/010-ollama-local-model-support-for-ai-translations-upstream-pr-7.md))
 - [ ] **#11 Publish own npm package (@drmxrcy/appscreen-mcp) + own GitHub Pages frontend deploy; switch APP_URL default; update README npx snippets** `chore` — 0% ([plan](.roadmap/plans/011-publish-own-npm-package-drmxrcy-appscreen-mcp-own-github-pages-frontend-deploy-switch-app-url-default-update-readme-npx-snippets.md))
+- [ ] **#14 Upstream PR #26: IndexedDB DataCloneError guard — take only if bug reproduces in our fork** `bug` — 0% ([plan](.roadmap/plans/014-upstream-pr-26-indexeddb-datacloneerror-guard-take-only-if-bug-reproduces-in-our-fork.md))
 
 ### [ ] v1.3.0 — 0%
 - [ ] **#12 Screenshot spec validation MCP tool: check exports against current App Store size requirements before upload** `feature` — 0% ([plan](.roadmap/plans/012-screenshot-spec-validation-mcp-tool-check-exports-against-current-app-store-size-requirements-before-upload.md))
 - [ ] **#13 Project-as-JSON MCP tools: import/export project templates via MCP for agent-driven brand styling** `feature` — 0% ([plan](.roadmap/plans/013-project-as-json-mcp-tools-import-export-project-templates-via-mcp-for-agent-driven-brand-styling.md))
+- [ ] **#15 Port upstream PRs #40/#41 (panorama background spanning + iPad device) — diff-check against our #37-based fork first** `feature` — 0% ([plan](.roadmap/plans/015-port-upstream-prs-40-41-panorama-background-spanning-ipad-device-diff-check-against-our-37-based-fork-first.md))
+- [ ] **#16 Upstream PR #32: numeric input fields for range sliders** `feature` — 0% ([plan](.roadmap/plans/016-upstream-pr-32-numeric-input-fields-for-range-sliders.md))
 <!-- roadmap:auto:end -->

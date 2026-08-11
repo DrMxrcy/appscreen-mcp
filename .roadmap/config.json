@@ -1,7 +1,7 @@
 {
   "project": "AppScreen MCP",
   "currentVersion": "1.0.0",
-  "nextId": 14,
+  "nextId": 17,
   "items": [
     {
       "id": 1,
@@ -119,6 +119,33 @@
       "version": "1.3.0",
       "file": "plans/013-project-as-json-mcp-tools-import-export-project-templates-via-mcp-for-agent-driven-brand-styling.md",
       "note": "Save and reuse whole project styles as templates through the automation interface"
+    },
+    {
+      "id": 14,
+      "slug": "upstream-pr-26-indexeddb-datacloneerror-guard-take-only-if-bug-reproduces-in-our-fork",
+      "title": "Upstream PR #26: IndexedDB DataCloneError guard \u2014 take only if bug reproduces in our fork",
+      "type": "bug",
+      "version": "1.2.0",
+      "file": "plans/014-upstream-pr-26-indexeddb-datacloneerror-guard-take-only-if-bug-reproduces-in-our-fork.md",
+      "note": "Projects save reliably even when older data contains unsaveable objects"
+    },
+    {
+      "id": 15,
+      "slug": "port-upstream-prs-40-41-panorama-background-spanning-ipad-device-diff-check-against-our-37-based-fork-first",
+      "title": "Port upstream PRs #40/#41 (panorama background spanning + iPad device) \u2014 diff-check against our #37-based fork first",
+      "type": "feature",
+      "version": "1.3.0",
+      "file": "plans/015-port-upstream-prs-40-41-panorama-background-spanning-ipad-device-diff-check-against-our-37-based-fork-first.md",
+      "note": "iPad device mockups and backgrounds that span across all screenshots"
+    },
+    {
+      "id": 16,
+      "slug": "upstream-pr-32-numeric-input-fields-for-range-sliders",
+      "title": "Upstream PR #32: numeric input fields for range sliders",
+      "type": "feature",
+      "version": "1.3.0",
+      "file": "plans/016-upstream-pr-32-numeric-input-fields-for-range-sliders.md",
+      "note": "Type exact values next to every slider instead of dragging"
     }
   ],
   "settings": {
