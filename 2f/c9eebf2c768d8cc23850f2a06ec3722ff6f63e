@@ -1,0 +1,44 @@
+mcp-bridge.js
+  s_d402dad4387bd5::t_4428e991b33364 556,562-567
+app.js
+  s_d402dad4387bd5::t_d4155d10300dc2 7626-7628,7659,7665,7716,7722,8239-8241,8271,8278,8329,8335
+  s_d402dad4387bd5::t_509a3759176672 80,2107
+  s_d402dad4387bd5::t_e7b2e2bec089e1 2461-2463,4737-4745,6195-6197
+.roadmap/config.json
+  s_d402dad4387bd5::t_9261716699f986 101,103-104
+ROADMAP.md
+  s_d402dad4387bd5::t_9261716699f986 23,26
+index.html
+  s_d402dad4387bd5::t_e3173837261cde 1010-1017
+  s_3090e083f8d04c::t_c4f4d8bda3246c 1009
+.roadmap/plans/007-text-alignment-options-upstream-issue-29.md
+  s_d402dad4387bd5::t_9261716699f986 6,24-26
+mcp-server/src/index.ts
+  s_d402dad4387bd5::t_9d18fe1bf51683 415-418
+CHANGELOG.md
+  s_d402dad4387bd5::t_9261716699f986 10,15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "2fc9eebf2c768d8cc23850f2a06ec3722ff6f63e",
+  "prompts": {},
+  "sessions": {
+    "s_3090e083f8d04c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "eb3b30b3-998d-43e8-bea3-a3296dc96125",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    },
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
