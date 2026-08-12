@@ -8,7 +8,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { chromium, type BrowserContext, type Page } from 'playwright';
 import { z } from 'zod';
-import { SCREENSHOT_DISPLAY_TYPES, uploadScreenshots } from './asc-upload.js';
+import { SCREENSHOT_DISPLAY_TYPES, uploadScreenshots, validateScreenshot } from './asc-upload.js';
 
 const DEFAULT_APP_URL = process.env.APPSCREEN_URL ?? 'https://drmxrcy.github.io/appscreen-mcp/';
 const OUTPUT_DIR =
@@ -727,6 +727,34 @@ Behaviour:
       .describe('Defaults to true. Must be explicitly set to false to actually upload to App Store Connect.'),
   },
   async (args) => uploadScreenshots(args),
+);
+
+registerTool(
+  'appscreen_validate_screenshots',
+  `Check screenshot files against App Store Connect's dimension/format/alpha rules for a given display type, without uploading anything. Use this as the pre-upload check for appscreen_upload_to_app_store — same validation rules, purely local, no credentials needed.`,
+  {
+    files: z.array(z.string().min(1)).min(1).describe('Absolute or relative paths to the screenshot files to check.'),
+    displayType: z
+      .enum(SCREENSHOT_DISPLAY_TYPES)
+      .describe(
+        'Device screenshot slot. Note the names lag Apple marketing names: APP_IPHONE_67 is the 6.9" iPhone slot (1320x2868), APP_IPHONE_61 is the 6.3" slot, APP_IPAD_PRO_3GEN_129 is the 13" iPad slot (2064x2752).',
+      ),
+  },
+  async ({ files, displayType }) => {
+    const results = [];
+    for (const file of files) {
+      const absolute = path.resolve(file);
+      const issues: string[] = [];
+      try {
+        const buffer = await readFile(absolute);
+        validateScreenshot(path.basename(absolute), buffer, displayType);
+      } catch (error) {
+        issues.push(error instanceof Error ? error.message : String(error));
+      }
+      results.push({ file: absolute, ok: issues.length === 0, issues });
+    }
+    return { ok: results.every((r) => r.ok), displayType, results };
+  },
 );
 
 registerTool(

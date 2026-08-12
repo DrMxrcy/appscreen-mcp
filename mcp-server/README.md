@@ -285,6 +285,12 @@ Notes:
 - Apple allows at most 10 screenshots per set; the tool reports the existing count and refuses to
   exceed the limit rather than deleting anything.
 
+### Validating screenshots without uploading
+
+`appscreen_validate_screenshots` runs the same local checks (format, alpha channel, exact pixel
+dimensions) for a `files` list and `displayType`, with no credentials required. Use it as a
+pre-flight check before `appscreen_upload_to_app_store`; each result is `{ file, ok, issues[] }`.
+
 ## Recommended workflow for agents
 
 For production App Store or Google Play screenshot sets with different captions per screenshot, use:

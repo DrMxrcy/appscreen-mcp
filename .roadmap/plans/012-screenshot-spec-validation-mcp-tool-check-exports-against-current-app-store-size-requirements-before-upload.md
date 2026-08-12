@@ -3,7 +3,7 @@ id: 12
 title: Screenshot spec validation MCP tool: check exports against current App Store size requirements before upload
 type: feature
 version: 1.3.0
-status: planned
+status: done
 created: 2026-08-11
 ---
 
@@ -20,5 +20,5 @@ created: 2026-08-11
 - **Downstream impact:** shares resolution table with upload tool — single source of truth
 
 ## 🚶 Step-by-Step Checklist
-- [ ] Step 1: Export validation core; register validate tool with per-file structured results -> target: mcp-server/src
-- [ ] Step 2: Verify: valid/invalid fixtures, alpha PNG, wrong dims; README section -> target: offline checks + docs
+- [x] Step 1: Export validation core; register validate tool with per-file structured results -> target: mcp-server/src
+- [x] Step 2: Verify: valid/invalid fixtures, alpha PNG, wrong dims; README section -> target: offline checks + docs

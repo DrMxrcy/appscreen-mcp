@@ -3,7 +3,7 @@
 ## v1.3.0 — (in progress)
 
 ### ✨ New
-- (pending) Check screenshots against current App Store size rules before uploading, so rejections never happen
+- Check screenshots against current App Store size rules before uploading, so rejections never happen
 - (pending) Save and reuse whole project styles as templates through the automation interface
 - (pending) iPad device mockups and backgrounds that span across all screenshots
 - (pending) Type exact values next to every slider instead of dragging
