@@ -28,9 +28,9 @@
 - [ ] **#11 Publish own npm package (@drmxrcy/appscreen-mcp) + own GitHub Pages frontend deploy; switch APP_URL default; update README npx snippets** `chore` — 67% ([plan](.roadmap/plans/011-publish-own-npm-package-drmxrcy-appscreen-mcp-own-github-pages-frontend-deploy-switch-app-url-default-update-readme-npx-snippets.md))
 - [x] **#14 Upstream PR #26: IndexedDB DataCloneError guard — take only if bug reproduces in our fork** `bug` — 100% ([plan](.roadmap/plans/014-upstream-pr-26-indexeddb-datacloneerror-guard-take-only-if-bug-reproduces-in-our-fork.md))
 
-### [ ] v1.3.0 — 20%
+### [ ] v1.3.0 — 50%
 - [x] **#12 Screenshot spec validation MCP tool: check exports against current App Store size requirements before upload** `feature` — 100% ([plan](.roadmap/plans/012-screenshot-spec-validation-mcp-tool-check-exports-against-current-app-store-size-requirements-before-upload.md))
-- [ ] **#13 Project-as-JSON MCP tools: import/export project templates via MCP for agent-driven brand styling** `feature` — 0% ([plan](.roadmap/plans/013-project-as-json-mcp-tools-import-export-project-templates-via-mcp-for-agent-driven-brand-styling.md))
+- [x] **#13 Project-as-JSON MCP tools: import/export project templates via MCP for agent-driven brand styling** `feature` — 100% ([plan](.roadmap/plans/013-project-as-json-mcp-tools-import-export-project-templates-via-mcp-for-agent-driven-brand-styling.md))
 - [ ] **#15 Port upstream PRs #40/#41 (panorama background spanning + iPad device) — diff-check against our #37-based fork first** `feature` — 0% ([plan](.roadmap/plans/015-port-upstream-prs-40-41-panorama-background-spanning-ipad-device-diff-check-against-our-37-based-fork-first.md))
 - [ ] **#16 Upstream PR #32: numeric input fields for range sliders** `feature` — 0% ([plan](.roadmap/plans/016-upstream-pr-32-numeric-input-fields-for-range-sliders.md))
 <!-- roadmap:auto:end -->

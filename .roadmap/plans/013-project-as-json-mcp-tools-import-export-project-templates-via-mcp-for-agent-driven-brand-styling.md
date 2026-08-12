@@ -3,7 +3,7 @@ id: 13
 title: Project-as-JSON MCP tools: import/export project templates via MCP for agent-driven brand styling
 type: feature
 version: 1.3.0
-status: planned
+status: done
 created: 2026-08-11
 ---
 
@@ -20,6 +20,6 @@ created: 2026-08-11
 - **Downstream impact:** apply must respect _normalized text guards and side-preview cache invalidation
 
 ## 🚶 Step-by-Step Checklist
-- [ ] Step 1: Bridge: exportProjectTemplate / applyProjectTemplate with image-free serialization -> target: mcp-bridge.js
-- [ ] Step 2: Server tools + zod schemas -> target: mcp-server/src/index.ts
-- [ ] Step 3: Verify round-trip in browser (style applied, images untouched); README -> target: smoke + docs
+- [x] Step 1: Bridge: exportProjectTemplate / applyProjectTemplate with image-free serialization -> target: mcp-bridge.js
+- [x] Step 2: Server tools + zod schemas -> target: mcp-server/src/index.ts
+- [x] Step 3: Verify round-trip in browser (style applied, images untouched); README -> target: smoke + docs

@@ -209,6 +209,8 @@ For local development from a cloned repository:
 - `appscreen_update_popout`
 - `appscreen_delete_popout`
 - `appscreen_apply_style_to_all`
+- `appscreen_export_project_template`
+- `appscreen_apply_project_template`
 - `appscreen_create_screenshot_set`
 - `appscreen_patch_state`
 - `appscreen_capture_editor_preview`
@@ -217,6 +219,37 @@ For local development from a cloned repository:
 - `appscreen_demo_run_cable_launch_recipe`
 - `appscreen_upload_to_app_store`
 - `appscreen_raw_bridge_call`
+
+## Project style templates
+
+`appscreen_export_project_template` serializes a project's look as JSON, and
+`appscreen_apply_project_template` stamps that look onto the current project. Use it to
+keep one brand style across projects without re-issuing every styling call.
+
+```jsonc
+{
+  "formatVersion": 1,
+  "defaults":   { "background": {}, "screenshot": {}, "text": {} },
+  "screenshots": [{ "background": {}, "screenshot": {}, "text": {}, "elements": [], "popouts": [] }]
+}
+```
+
+Templates are style, not content:
+
+- **No images.** Screenshot images, background images (`imageSrc`), and element/popout
+  image sources are stripped, so a template stays small and portable instead of carrying
+  embedded base64. Applying a template never touches the target's images. Image-backed
+  overlay elements therefore come back inert — re-add their artwork with
+  `appscreen_add_graphic_element` after applying.
+- **No copy.** `headlines`/`subheadlines` are excluded; existing captions survive an
+  apply. Text layout and styling — including per-language layout in `languageSettings` —
+  is part of the template.
+- **Overlays are replaced.** `elements` and `popouts` from the template overwrite the
+  target screenshot's own.
+
+`mode` (default `all`) selects the scope: `defaults-only` styles just the project
+defaults used by new screenshots; `all` additionally styles every existing screenshot by
+index, cycling the template's screenshot entries when the counts differ.
 
 ## Uploading to App Store Connect
 

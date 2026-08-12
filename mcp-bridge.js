@@ -65,6 +65,80 @@
         return copy;
     }
 
+    const TEMPLATE_FORMAT_VERSION = 1;
+
+    // Style templates are deliberately image-free: no HTMLImageElement, no
+    // imageSrc/src base64. A template is a look, not a payload.
+    function templateBackground(background) {
+        const copy = clonePlain(background || {});
+        delete copy.image;
+        delete copy.imageSrc;
+        return copy;
+    }
+
+    // Layout/style survives (incl. per-language layout in languageSettings);
+    // the actual copy (headlines/subheadlines) does not.
+    function templateText(text) {
+        const copy = clonePlain(text || {});
+        delete copy._normalized;
+        delete copy.headlines;
+        delete copy.subheadlines;
+        // Language SETS are content decisions too — replacing the target's array
+        // while its content maps keep extra languages orphans that content
+        delete copy.headlineLanguages;
+        delete copy.subheadlineLanguages;
+        delete copy.currentHeadlineLang;
+        delete copy.currentSubheadlineLang;
+        return copy;
+    }
+
+    function templateOverlays(list) {
+        return clonePlain(list || []).map((item) => {
+            delete item.img;
+            delete item.image;
+            delete item.src;
+            return item;
+        });
+    }
+
+    function templateStyle(source) {
+        return {
+            background: templateBackground(source.background),
+            screenshot: clonePlain(source.screenshot || {}),
+            text: templateText(source.text)
+        };
+    }
+
+    // Merge semantics match setBackground/setDeviceSettings: the template
+    // overrides the fields it carries and leaves everything else (including the
+    // target's own background image) alone.
+    function applyTemplateStyle(target, style) {
+        if (!style || typeof style !== 'object' || Array.isArray(style)) return;
+        if (style.background) {
+            target.background ||= {};
+            deepMerge(target.background, templateBackground(style.background));
+        }
+        if (style.screenshot) {
+            target.screenshot ||= {};
+            deepMerge(target.screenshot, clonePlain(style.screenshot));
+        }
+        if (style.text) {
+            target.text ||= {};
+            delete target.text._normalized; // let new fields re-merge through normalizeTextSettings
+            deepMerge(target.text, templateText(style.text));
+        }
+    }
+
+    function validateTemplate(template) {
+        if (!template || typeof template !== 'object' || Array.isArray(template)) {
+            throw new Error('template must be an object.');
+        }
+        if (template.formatVersion !== TEMPLATE_FORMAT_VERSION) {
+            throw new Error(`Unsupported template formatVersion ${template.formatVersion}. Expected ${TEMPLATE_FORMAT_VERSION}.`);
+        }
+        return template;
+    }
+
     function ok(extra = {}) {
         return { ok: true, ...extra };
     }
@@ -694,6 +768,56 @@
                 });
                 refresh();
                 return { screenshotCount: state.screenshots.length };
+            });
+        },
+
+        async exportProjectTemplate() {
+            return invoke('exportProjectTemplate', async () => ({
+                template: {
+                    formatVersion: TEMPLATE_FORMAT_VERSION,
+                    defaults: templateStyle(state.defaults),
+                    screenshots: state.screenshots.map((s) => ({
+                        ...templateStyle(s),
+                        elements: templateOverlays(s.elements),
+                        popouts: templateOverlays(s.popouts)
+                    }))
+                }
+            }));
+        },
+
+        async applyProjectTemplate({ template, mode = 'all' } = {}) {
+            return invoke('applyProjectTemplate', async () => {
+                validateTemplate(template);
+                if (!['defaults-only', 'all'].includes(mode)) {
+                    throw new Error(`Unknown mode "${mode}". Expected defaults-only or all.`);
+                }
+
+                applyTemplateStyle(state.defaults, template.defaults);
+                if (state.defaults.text) {
+                    delete state.defaults.text._normalized;
+                    state.defaults.text = normalizeTextSettings(state.defaults.text);
+                }
+
+                const styles = mode === 'all' && Array.isArray(template.screenshots) ? template.screenshots : [];
+                if (styles.length > 0) {
+                    state.screenshots.forEach((_s, i) => {
+                        const s = ensureScreenshot(i);
+                        const style = styles[i % styles.length]; // cycle when counts differ
+                        applyTemplateStyle(s, style);
+                        if (Array.isArray(style.elements)) s.elements = templateOverlays(style.elements);
+                        if (Array.isArray(style.popouts)) s.popouts = templateOverlays(style.popouts);
+                        s.text = normalizeTextSettings(s.text);
+                    });
+                }
+
+                invalidateSidePreviewCache();
+                refresh();
+                return {
+                    mode,
+                    formatVersion: TEMPLATE_FORMAT_VERSION,
+                    screenshotsStyled: styles.length > 0 ? state.screenshots.length : 0,
+                    templateScreenshots: Array.isArray(template.screenshots) ? template.screenshots.length : 0
+                };
             });
         },
 

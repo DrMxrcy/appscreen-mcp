@@ -478,6 +478,36 @@ registerTool(
 );
 
 registerTool(
+  'appscreen_export_project_template',
+  `Serialize the current project's STYLE as reusable JSON (a brand template).
+
+Contains background, device/mockup and text layout settings for the project defaults plus each screenshot, along with overlay elements and popouts.
+
+Deliberately image-free: no screenshot images, no background images (imageSrc is dropped), no element/popout image sources. It also excludes headline/subheadline copy — only layout and styling, including per-language layout in languageSettings.
+
+Feed the returned template to appscreen_apply_project_template to brand another project.`,
+  {},
+  async () => bridge('exportProjectTemplate'),
+);
+
+registerTool(
+  'appscreen_apply_project_template',
+  `Apply a style template (from appscreen_export_project_template) to the current project.
+
+mode "defaults-only" styles only the project defaults used by new screenshots.
+mode "all" also styles every existing screenshot from template.screenshots by index, cycling the template entries when the counts differ.
+
+Existing screenshot images are never touched. Overlay elements and popouts are replaced by the template's, and headline/subheadline copy is preserved.`,
+  {
+    template: z
+      .record(z.string(), z.unknown())
+      .describe('Template object with formatVersion 1, as returned by appscreen_export_project_template.'),
+    mode: z.enum(['defaults-only', 'all']).default('all'),
+  },
+  async (args) => bridge('applyProjectTemplate', args),
+);
+
+registerTool(
   'appscreen_create_screenshot_set',
   `Create a complete multi-screen App Store screenshot set in one call.
 
