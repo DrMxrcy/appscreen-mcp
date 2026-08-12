@@ -1,0 +1,39 @@
+mcp-server/README.md
+  s_d402dad4387bd5::t_5375b79a01787d 288-293
+mcp-server/src/index.ts
+  s_d402dad4387bd5::t_266599e42a2a1d 733-759
+  s_d402dad4387bd5::t_2bf5bd945b07ee 11
+  s_90b9f1824c3c35::t_18ea56eec7378b 732
+.roadmap/config.json
+  s_d402dad4387bd5::t_4769ff0679e7a5 155
+.roadmap/plans/012-screenshot-spec-validation-mcp-tool-check-exports-against-current-app-store-size-requirements-before-upload.md
+  s_d402dad4387bd5::t_043b8cdb6eb3d0 6,23-24
+CHANGELOG.md
+  s_d402dad4387bd5::t_aeb95256b359f8 6
+ROADMAP.md
+  s_d402dad4387bd5::t_7c020cced39202 31-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "922ef518c9a3b737f6f3106194453b64f86c80a1",
+  "prompts": {},
+  "sessions": {
+    "s_90b9f1824c3c35": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8154ad57-9cf2-4a9d-b8cd-b62eb48f4ecf",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    },
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
