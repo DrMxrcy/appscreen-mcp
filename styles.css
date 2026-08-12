@@ -655,6 +655,54 @@ input[type="range"]::-webkit-slider-thumb {
     color: var(--text-secondary);
 }
 
+/* Editable slider readout (number field + unit suffix) */
+.range-value.range-value-editable {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1px;
+}
+
+.control-row .range-value.range-value-editable {
+    min-width: 62px;
+}
+
+.range-value-editable .range-number {
+    width: 44px;
+    min-width: 0;
+    padding: 3px 5px;
+    font-family: monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: right;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    -moz-appearance: textfield;
+}
+
+.range-value-editable .range-number::-webkit-outer-spin-button,
+.range-value-editable .range-number::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.range-value-editable .range-number:hover {
+    border-color: var(--border-color);
+}
+
+.range-value-editable .range-number:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--bg-tertiary);
+}
+
+.range-suffix {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
 /* Button group */
 .btn-group {
     display: flex;

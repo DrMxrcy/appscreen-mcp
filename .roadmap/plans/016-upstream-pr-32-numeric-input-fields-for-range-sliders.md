@@ -3,7 +3,7 @@ id: 16
 title: Upstream PR #32: numeric input fields for range sliders
 type: feature
 version: 1.3.0
-status: planned
+status: done
 created: 2026-08-11
 ---
 
@@ -20,5 +20,5 @@ created: 2026-08-11
 - **Downstream impact:** big diff (+472/-133 upstream), conflict-prone against our fork; port hunk-wise like PR #33
 
 ## 🚶 Step-by-Step Checklist
-- [ ] Step 1: Fetch diff, port value-input mechanism generically (helper like hex enhancer if patch structure allows) -> target: app.js, index.html
-- [ ] Step 2: Verify: type value updates canvas + slider; slider updates input; bounds clamped; no double-fire -> target: browser smoke
+- [x] Step 1: Fetch diff, port value-input mechanism generically (helper like hex enhancer if patch structure allows) -> target: app.js, index.html
+- [x] Step 2: Verify: type value updates canvas + slider; slider updates input; bounds clamped; no double-fire -> target: browser smoke

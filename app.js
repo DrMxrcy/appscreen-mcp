@@ -1624,6 +1624,7 @@ function initSync() {
     setupElementEventListeners();
     setupPopoutEventListeners();
     setupColorHexInputs();
+    setupRangeNumberInputs();
     setupSliderResetButtons();
     initFontPicker();
     updateGradientStopsUI();
@@ -1730,6 +1731,70 @@ function syncColorHexInputs(root = document) {
             hexInput.setAttribute('aria-invalid', 'false');
         }
     });
+}
+
+// Turn the static ".range-value" slider readout into an editable number field.
+// ponytail: we intercept the span's own textContent setter rather than rewriting the
+// ~90 `#x-value.textContent = ...` call sites across app.js and three-renderer.js.
+// One hook covers every existing and future slider; the slider's 'input' event stays
+// the single state-write path (typing dispatches it, exactly like the hex inputs do).
+function enhanceRangeValue(span) {
+    if (!span || span.dataset.numberEnhanced === 'true') return;
+    const slider = span.closest('.control-row')?.querySelector('input[type="range"]');
+    if (!slider) return;
+
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.className = 'range-number';
+    if (slider.min !== '') input.min = slider.min;
+    if (slider.max !== '') input.max = slider.max;
+    input.step = slider.step || '1'; // range defaults to step 1 when unset
+    input.setAttribute('autocomplete', 'off');
+    const labelText = span.closest('.control-group')?.querySelector('.control-label')?.textContent?.trim();
+    input.setAttribute('aria-label', `${labelText || slider.id.replace(/-/g, ' ')} value`);
+
+    const suffixEl = document.createElement('span');
+    suffixEl.className = 'range-suffix';
+
+    let display = span.textContent.trim();
+    const render = () => {
+        suffixEl.textContent = display.replace(/^\s*[-+]?[\d.]*/, '');
+        // Don't fight the user mid-typing; blur re-syncs from the slider.
+        if (document.activeElement !== input) {
+            const num = parseFloat(display);
+            input.value = isNaN(num) ? '' : String(num);
+        }
+    };
+
+    span.dataset.numberEnhanced = 'true';
+    span.textContent = '';
+    span.classList.add('range-value-editable');
+    span.append(input, suffixEl);
+    Object.defineProperty(span, 'textContent', {
+        configurable: true,
+        get: () => display,
+        set: (value) => { display = String(value); render(); }
+    });
+    render();
+
+    input.addEventListener('input', () => {
+        const num = parseFloat(input.value);
+        if (!isFinite(num)) return; // empty or partial ("-", "."): wait for blur
+        const before = slider.value;
+        slider.value = num; // the browser clamps to min/max and snaps to step
+        if (slider.value !== before) slider.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    input.addEventListener('blur', () => {
+        const num = parseFloat(display);
+        input.value = isNaN(num) ? '' : String(num);
+    });
+    input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') input.blur();
+    });
+}
+
+function setupRangeNumberInputs(root = document) {
+    root.querySelectorAll('.range-value').forEach(enhanceRangeValue);
 }
 
 // Save state to IndexedDB for current project
