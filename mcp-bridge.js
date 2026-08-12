@@ -229,6 +229,10 @@
     }
 
     function refresh({ save = true, ui = true, canvas = true } = {}) {
+        // Bridge mutations write state directly, bypassing the app's per-path
+        // cache invalidation — drop the whole side-preview cache each refresh
+        // (bridge calls are infrequent; a full re-render is cheap and correct)
+        if (typeof invalidateSidePreviewCache === 'function') invalidateSidePreviewCache();
         if (ui) {
             if (typeof syncUIWithState === 'function') syncUIWithState();
             if (typeof updateScreenshotList === 'function') updateScreenshotList();
@@ -239,6 +243,18 @@
         }
         if (canvas && typeof updateCanvas === 'function') updateCanvas();
         if (save && typeof saveState === 'function') saveState();
+    }
+
+    // Bridge writes bypass the app's setBackground span propagation — re-sync
+    // shared keys across the spanning group after a direct background mutation
+    function propagateSpannedBackground(source) {
+        if (!source?.imageSpan || typeof SPANNED_BACKGROUND_SYNC_KEYS === 'undefined') return;
+        state.screenshots.forEach((item) => {
+            if (item.background === source || !item.background?.imageSpan) return;
+            SPANNED_BACKGROUND_SYNC_KEYS.forEach((key) => {
+                if (key in source) item.background[key] = source[key];
+            });
+        });
     }
 
     async function settleRender() {
@@ -585,6 +601,7 @@
                 if (!background || typeof background !== 'object') throw new Error('background object is required.');
                 if (background.type && !knownBackgroundTypes.includes(background.type)) throw new Error(`Unknown background type: ${background.type}`);
                 deepMerge(s.background, background);
+                propagateSpannedBackground(s.background);
                 state.selectedIndex = Number(index);
                 refresh();
                 return { background: clonePlain(s.background) };
@@ -602,6 +619,7 @@
                 s.background.imageBlur = Number(blur) || 0;
                 s.background.overlayColor = overlayColor;
                 s.background.overlayOpacity = Number(overlayOpacity) || 0;
+                propagateSpannedBackground(s.background);
                 state.selectedIndex = Number(index);
                 refresh();
                 return { background: clonePlain(s.background) };

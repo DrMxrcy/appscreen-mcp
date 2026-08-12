@@ -21,7 +21,9 @@ const state = {
             },
             solid: '#1a1a2e',
             image: null,
+            imageSrc: null,
             imageFit: 'cover',
+            imageSpan: false,
             imageBlur: 0,
             overlayColor: '#000000',
             overlayOpacity: 0,
@@ -602,20 +604,98 @@ function formatValue(num) {
     return Number.isInteger(rounded) ? rounded.toString() : rounded.toFixed(1);
 }
 
+// Settings that must stay identical across a spanning group — the image runs
+// across all of them, so a per-screen fit/blur/overlay would tear at the seams
+const SPANNED_BACKGROUND_SYNC_KEYS = new Set([
+    'type', 'image', 'imageSrc', 'imageFit', 'imageBlur',
+    'overlayColor', 'overlayOpacity', 'noise', 'noiseIntensity'
+]);
+
+function setBackgroundValue(background, key, value) {
+    if (key.includes('.')) {
+        const parts = key.split('.');
+        let obj = background;
+        for (let i = 0; i < parts.length - 1; i++) {
+            obj = obj[parts[i]];
+        }
+        obj[parts[parts.length - 1]] = value;
+    } else {
+        background[key] = value;
+    }
+}
+
+// Deep copy background settings, carrying the live Image object across (not JSON-serializable)
+function cloneBackground(bg) {
+    const copy = JSON.parse(JSON.stringify({ ...bg, image: undefined }));
+    if (bg.image) copy.image = bg.image;
+    return copy;
+}
+
 function setBackground(key, value) {
     const screenshot = getCurrentScreenshot();
-    if (screenshot) {
-        if (key.includes('.')) {
-            const parts = key.split('.');
-            let obj = screenshot.background;
-            for (let i = 0; i < parts.length - 1; i++) {
-                obj = obj[parts[i]];
-            }
-            obj[parts[parts.length - 1]] = value;
-        } else {
-            screenshot.background[key] = value;
-        }
+    if (!screenshot) return;
+
+    setBackgroundValue(screenshot.background, key, value);
+
+    if (screenshot.background.imageSpan && SPANNED_BACKGROUND_SYNC_KEYS.has(key.split('.')[0])) {
+        state.screenshots.forEach(item => {
+            if (item === screenshot || !item.background?.imageSpan) return;
+            setBackgroundValue(item.background, key, value);
+        });
+        invalidateSidePreviewCache(); // every spanned screen just changed
     }
+}
+
+// A background image much wider than one screen is meant to run across all of them
+function isWideBackgroundImage(img) {
+    if (!img || state.screenshots.length < 2) return false;
+    const dims = getCanvasDimensions();
+    return (img.width / img.height) > Math.max((dims.width / dims.height) * 1.6, 1);
+}
+
+// Set the background image on the current screenshot, spreading it across every
+// screenshot when spanning is on (or the image is panorama-wide)
+function applyBackgroundImage(img, src) {
+    const screenshot = getCurrentScreenshot();
+    if (!screenshot) return;
+
+    const bg = screenshot.background;
+    bg.type = 'image';
+    bg.image = img;
+    bg.imageSrc = src || img.src || null;
+    bg.imageSpan = bg.imageSpan || isWideBackgroundImage(img);
+
+    if (bg.imageSpan) {
+        state.screenshots.forEach(item => {
+            if (item !== screenshot) item.background = cloneBackground(bg);
+        });
+        invalidateSidePreviewCache();
+    }
+}
+
+function setBackgroundImageSpan(enabled) {
+    const screenshot = getCurrentScreenshot();
+    if (!screenshot) return;
+
+    const bg = screenshot.background;
+    bg.imageSpan = enabled;
+
+    if (enabled) {
+        state.screenshots.forEach(item => {
+            if (item !== screenshot) item.background = cloneBackground(bg);
+        });
+    } else {
+        // Only release the screens that were sharing this image
+        const src = bg.imageSrc || bg.image?.src || null;
+        state.screenshots.forEach(item => {
+            const itemSrc = item.background?.imageSrc || item.background?.image?.src || null;
+            if (item.background?.imageSpan && (item.background.image === bg.image || itemSrc === src)) {
+                item.background.imageSpan = false;
+            }
+        });
+    }
+
+    invalidateSidePreviewCache();
 }
 
 function setScreenshotSetting(key, value) {
@@ -2062,7 +2142,9 @@ function resetStateToDefaults() {
             },
             solid: '#1a1a2e',
             image: null,
+            imageSrc: null,
             imageFit: 'cover',
+            imageSpan: false,
             imageBlur: 0,
             overlayColor: '#000000',
             overlayOpacity: 0,
@@ -2400,6 +2482,7 @@ function syncUIWithState() {
         bgImagePreview.style.display = 'none';
     }
     document.getElementById('bg-image-fit').value = bg.imageFit;
+    document.getElementById('bg-image-span').classList.toggle('active', !!bg.imageSpan);
     document.getElementById('bg-blur').value = bg.imageBlur;
     document.getElementById('bg-blur-value').textContent = formatValue(bg.imageBlur) + 'px';
     document.getElementById('bg-overlay-color').value = bg.overlayColor;
@@ -4473,10 +4556,8 @@ function setupEventListeners() {
             reader.onload = (event) => {
                 const img = new Image();
                 img.onload = () => {
-                    setBackground('image', img);
-                    setBackground('imageSrc', event.target.result);
-                    document.getElementById('bg-image-preview').src = event.target.result;
-                    document.getElementById('bg-image-preview').style.display = 'block';
+                    applyBackgroundImage(img, event.target.result);
+                    syncUIWithState();
                     updateCanvas();
                 };
                 img.src = event.target.result;
@@ -4489,6 +4570,13 @@ function setupEventListeners() {
 
     document.getElementById('bg-image-fit').addEventListener('change', (e) => {
         setBackground('imageFit', e.target.value);
+        updateCanvas();
+    });
+
+    document.getElementById('bg-image-span').addEventListener('click', function () {
+        this.classList.toggle('active');
+        setBackgroundImageSpan(this.classList.contains('active'));
+        syncUIWithState();
         updateCanvas();
     });
 
@@ -6536,13 +6624,21 @@ function createNewScreenshot(img, src, name, lang, deviceType) {
     const textDefaults = normalizeTextSettings(state.defaults.text);
     state.defaults.text = textDefaults;
 
+    // A spanning background covers every screen, so a new screen joins the span
+    // instead of starting from the project defaults
+    const activeBackground = getCurrentScreenshot()?.background;
+    const spanning = !!activeBackground?.imageSpan;
+    // Span slices shift when the screen count changes — even when the SELECTED
+    // screen isn't spanning, another one might be
+    if (spanning || state.screenshots.some(s => s.background?.imageSpan)) invalidateSidePreviewCache();
+
     // Each screenshot gets its own copy of all settings from defaults
     state.screenshots.push({
         image: img || null, // Keep for legacy compatibility
         name: name || 'Blank Screen',
         deviceType: deviceType,
         localizedImages: localizedImages,
-        background: JSON.parse(JSON.stringify(state.defaults.background)),
+        background: cloneBackground(spanning ? activeBackground : state.defaults.background),
         screenshot: JSON.parse(JSON.stringify(state.defaults.screenshot)),
         text: JSON.parse(JSON.stringify(textDefaults)),
         elements: JSON.parse(JSON.stringify(state.defaults.elements || [])),
@@ -7444,7 +7540,7 @@ function renderScreenshotToCanvas(index, targetCanvas, targetCtx, dims, previewS
 
     // Draw background for this screenshot
     const bg = screenshot.background;
-    drawBackgroundToContext(targetCtx, dims, bg);
+    drawBackgroundToContext(targetCtx, dims, bg, index, state.screenshots.length);
 
     // Draw noise if enabled
     if (bg.noise) {
@@ -7500,7 +7596,7 @@ function renderScreenshotToCanvas(index, targetCanvas, targetCtx, dims, previewS
     }
 }
 
-function drawBackgroundToContext(context, dims, bg) {
+function drawBackgroundToContext(context, dims, bg, screenIndex = 0, screenCount = 1) {
     if (bg.type === 'gradient') {
         const angle = bg.gradient.angle * Math.PI / 180;
         const x1 = dims.width / 2 - Math.cos(angle) * dims.width;
@@ -7519,50 +7615,65 @@ function drawBackgroundToContext(context, dims, bg) {
         context.fillStyle = bg.solid;
         context.fillRect(0, 0, dims.width, dims.height);
     } else if (bg.type === 'image' && bg.image) {
-        const img = bg.image;
-        let sx = 0, sy = 0, sw = img.width, sh = img.height;
-        let dx = 0, dy = 0, dw = dims.width, dh = dims.height;
+        drawBackgroundImageToContext(context, dims, bg, screenIndex, screenCount);
+    }
+}
 
-        if (bg.imageFit === 'cover') {
-            const imgRatio = img.width / img.height;
-            const canvasRatio = dims.width / dims.height;
+// Draws the background image fitted to one screen, or — when spanning — fitted to the
+// full width of all screens with this screen's slice clipped out of it.
+function drawBackgroundImageToContext(context, dims, bg, screenIndex = 0, screenCount = 1) {
+    const img = bg.image;
+    if (!img || !img.complete || !(img.naturalWidth || img.width)) return;
 
-            if (imgRatio > canvasRatio) {
-                sw = img.height * canvasRatio;
-                sx = (img.width - sw) / 2;
-            } else {
-                sh = img.width / canvasRatio;
-                sy = (img.height - sh) / 2;
-            }
-        } else if (bg.imageFit === 'contain') {
-            const imgRatio = img.width / img.height;
-            const canvasRatio = dims.width / dims.height;
+    const spanCount = bg.imageSpan ? Math.max(1, screenCount || state.screenshots.length || 1) : 1;
+    const spanIndex = bg.imageSpan ? Math.max(0, Math.min(screenIndex, spanCount - 1)) : 0;
+    const targetWidth = dims.width * spanCount;
+    const targetHeight = dims.height;
+    const imgRatio = img.width / img.height;
+    const targetRatio = targetWidth / targetHeight;
 
-            if (imgRatio > canvasRatio) {
-                dh = dims.width / imgRatio;
-                dy = (dims.height - dh) / 2;
-            } else {
-                dw = dims.height * imgRatio;
-                dx = (dims.width - dw) / 2;
-            }
+    // 'stretch' (and anything unknown) fills the target box exactly
+    let dx = 0, dy = 0, dw = targetWidth, dh = targetHeight;
 
-            context.fillStyle = '#000';
-            context.fillRect(0, 0, dims.width, dims.height);
+    if (bg.imageFit === 'cover') {
+        if (imgRatio > targetRatio) {
+            dw = targetHeight * imgRatio;
+            dx = (targetWidth - dw) / 2;
+        } else {
+            dh = targetWidth / imgRatio;
+            dy = (targetHeight - dh) / 2;
+        }
+    } else if (bg.imageFit === 'contain') {
+        if (imgRatio > targetRatio) {
+            dh = targetWidth / imgRatio;
+            dy = (targetHeight - dh) / 2;
+        } else {
+            dw = targetHeight * imgRatio;
+            dx = (targetWidth - dw) / 2;
         }
 
-        if (bg.imageBlur > 0) {
-            context.filter = `blur(${bg.imageBlur}px)`;
-        }
+        context.fillStyle = '#000';
+        context.fillRect(0, 0, dims.width, dims.height);
+    }
 
-        context.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
-        context.filter = 'none';
+    context.save();
+    context.beginPath();
+    context.rect(0, 0, dims.width, dims.height);
+    context.clip();
+    context.translate(-spanIndex * dims.width, 0);
 
-        if (bg.overlayOpacity > 0) {
-            context.fillStyle = bg.overlayColor;
-            context.globalAlpha = bg.overlayOpacity / 100;
-            context.fillRect(0, 0, dims.width, dims.height);
-            context.globalAlpha = 1;
-        }
+    if (bg.imageBlur > 0) {
+        context.filter = `blur(${bg.imageBlur}px)`;
+    }
+
+    context.drawImage(img, dx, dy, dw, dh);
+    context.restore();
+
+    if (bg.overlayOpacity > 0) {
+        context.fillStyle = bg.overlayColor;
+        context.globalAlpha = bg.overlayOpacity / 100;
+        context.fillRect(0, 0, dims.width, dims.height);
+        context.globalAlpha = 1;
     }
 }
 
@@ -8130,72 +8241,7 @@ function drawStar(context, cx, cy, size, color) {
 
 function drawBackground() {
     const dims = getCanvasDimensions();
-    const bg = getBackground();
-
-    if (bg.type === 'gradient') {
-        const angle = bg.gradient.angle * Math.PI / 180;
-        const x1 = dims.width / 2 - Math.cos(angle) * dims.width;
-        const y1 = dims.height / 2 - Math.sin(angle) * dims.height;
-        const x2 = dims.width / 2 + Math.cos(angle) * dims.width;
-        const y2 = dims.height / 2 + Math.sin(angle) * dims.height;
-
-        const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
-        bg.gradient.stops.forEach(stop => {
-            gradient.addColorStop(stop.position / 100, stop.color);
-        });
-
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, dims.width, dims.height);
-    } else if (bg.type === 'solid') {
-        ctx.fillStyle = bg.solid;
-        ctx.fillRect(0, 0, dims.width, dims.height);
-    } else if (bg.type === 'image' && bg.image) {
-        const img = bg.image;
-        let sx = 0, sy = 0, sw = img.width, sh = img.height;
-        let dx = 0, dy = 0, dw = dims.width, dh = dims.height;
-
-        if (bg.imageFit === 'cover') {
-            const imgRatio = img.width / img.height;
-            const canvasRatio = dims.width / dims.height;
-
-            if (imgRatio > canvasRatio) {
-                sw = img.height * canvasRatio;
-                sx = (img.width - sw) / 2;
-            } else {
-                sh = img.width / canvasRatio;
-                sy = (img.height - sh) / 2;
-            }
-        } else if (bg.imageFit === 'contain') {
-            const imgRatio = img.width / img.height;
-            const canvasRatio = dims.width / dims.height;
-
-            if (imgRatio > canvasRatio) {
-                dh = dims.width / imgRatio;
-                dy = (dims.height - dh) / 2;
-            } else {
-                dw = dims.height * imgRatio;
-                dx = (dims.width - dw) / 2;
-            }
-
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, dims.width, dims.height);
-        }
-
-        if (bg.imageBlur > 0) {
-            ctx.filter = `blur(${bg.imageBlur}px)`;
-        }
-
-        ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
-        ctx.filter = 'none';
-
-        // Overlay
-        if (bg.overlayOpacity > 0) {
-            ctx.fillStyle = bg.overlayColor;
-            ctx.globalAlpha = bg.overlayOpacity / 100;
-            ctx.fillRect(0, 0, dims.width, dims.height);
-            ctx.globalAlpha = 1;
-        }
-    }
+    drawBackgroundToContext(ctx, dims, getBackground(), state.selectedIndex, state.screenshots.length);
 }
 
 function drawScreenshot() {
