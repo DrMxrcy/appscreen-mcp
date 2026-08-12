@@ -3,7 +3,7 @@ id: 11
 title: Publish own npm package (@drmxrcy/appscreen-mcp) + own GitHub Pages frontend deploy; switch APP_URL default; update README npx snippets
 type: chore
 version: 1.2.0
-status: active
+status: done
 created: 2026-08-11
 ---
 
@@ -22,4 +22,4 @@ created: 2026-08-11
 ## 🚶 Step-by-Step Checklist
 - [x] Step 1: Rename package + repo metadata, bump version, switch APP_URL default to our Pages URL -> target: mcp-server/package.json, src/index.ts
 - [x] Step 2: GitHub Pages workflow deploying the frontend from main -> target: .github/workflows/pages.yml
-- [ ] Step 3: Update all install/config snippets; npm publish (needs user's npm login) -> target: READMEs
+- [x] Step 3: Update all install/config snippets; npm publish (needs user's npm login) -> target: READMEs

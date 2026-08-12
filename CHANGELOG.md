@@ -8,7 +8,7 @@
 - iPad device mockups and backgrounds that span across all screenshots
 - Type exact values next to every slider instead of dragging
 
-## v1.2.0 — (in progress)
+## v1.2.0 — 2026-08-12
 
 ### ✨ New
 - Push finished screenshots straight to App Store Connect without leaving your workflow
