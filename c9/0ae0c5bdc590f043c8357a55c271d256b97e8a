@@ -1,0 +1,36 @@
+mcp-bridge.js
+  s_d402dad4387bd5::t_b897cbc1b5307b 796-799
+  s_d402dad4387bd5::t_fa6584ee3466ae 86-91
+  s_d402dad4387bd5::t_17130b3b5aa305 772,774-795,800-821
+  s_d402dad4387bd5::t_639229f3154cb8 68-85,92-141
+  s_d402dad4387bd5::t_95a3b3e980c804 773
+mcp-server/README.md
+  s_d402dad4387bd5::t_af4471ed3e9c0c 212-213
+  s_d402dad4387bd5::t_a38336f7ea5c72 223-253
+mcp-server/src/index.ts
+  s_d402dad4387bd5::t_a8ec091561344e 480-509
+.roadmap/config.json
+  s_d402dad4387bd5::t_a708ce243fb66d 155
+.roadmap/plans/013-project-as-json-mcp-tools-import-export-project-templates-via-mcp-for-agent-driven-brand-styling.md
+  s_d402dad4387bd5::t_c6fa2fdfa2f104 6,23-25
+CHANGELOG.md
+  s_d402dad4387bd5::t_bd85e4d7f25361 7
+ROADMAP.md
+  s_d402dad4387bd5::t_754d62e162a87f 31,33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "c90ae0c5bdc590f043c8357a55c271d256b97e8a",
+  "prompts": {},
+  "sessions": {
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
