@@ -1,0 +1,32 @@
+styles.css
+  s_d402dad4387bd5::t_3ae9595aaddb97 670-671,673,676,685-686,691,695,698
+  s_d402dad4387bd5::t_e8a3919dc56097 692
+  s_d402dad4387bd5::t_e4066a306013c8 658-669,672,674-675,677-684,687-690,693-694,696-697,699-705
+app.js
+  s_d402dad4387bd5::t_4557b4ffb08d9d 1736-1799
+  s_d402dad4387bd5::t_d8242a4ebdf88d 1627
+.roadmap/config.json
+  s_d402dad4387bd5::t_0902c9588e1a82 155,158-159
+.roadmap/plans/016-upstream-pr-32-numeric-input-fields-for-range-sliders.md
+  s_d402dad4387bd5::t_e9e22a9f2d7cff 6,23-24
+CHANGELOG.md
+  s_d402dad4387bd5::t_bd1a26c28fbc6a 3,9
+ROADMAP.md
+  s_d402dad4387bd5::t_462b33ebacc27e 31,35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "631d3aff58b80512abbb32d53e25af38a1f8fb9a",
+  "prompts": {},
+  "sessions": {
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
