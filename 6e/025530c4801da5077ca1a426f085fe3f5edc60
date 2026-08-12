@@ -1,0 +1,25 @@
+ROADMAP.md
+  s_d402dad4387bd5::t_8049af998106ba 24,28
+.roadmap/config.json
+  s_d402dad4387bd5::t_8049af998106ba 155,159-160
+CHANGELOG.md
+  s_d402dad4387bd5::t_8049af998106ba 11
+.roadmap/plans/011-publish-own-npm-package-drmxrcy-appscreen-mcp-own-github-pages-frontend-deploy-switch-app-url-default-update-readme-npx-snippets.md
+  s_d402dad4387bd5::t_8049af998106ba 6,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "6e025530c4801da5077ca1a426f085fe3f5edc60",
+  "prompts": {},
+  "sessions": {
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
