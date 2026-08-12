@@ -1,0 +1,59 @@
+index.html
+  s_d402dad4387bd5::t_6abfb3882a4900 654
+  s_d402dad4387bd5::t_246b98c6ea3dd5 586-590
+  s_d402dad4387bd5::t_972a7cb6a62c44 585
+three-renderer.js
+  s_d402dad4387bd5::t_466e949235035c 87-98
+  s_d402dad4387bd5::t_9faf20c2abd683 523
+  s_d402dad4387bd5::t_0c2e42ec11289b 825
+  s_d402dad4387bd5::t_c944600d0ec7e2 120-333
+  s_d402dad4387bd5::t_9e9b3be6e3c9c1 579-585,591
+  s_d402dad4387bd5::t_7e93313177e3d0 463-468,477
+  s_d402dad4387bd5::t_d5daa6edc7f7b3 616-622
+  s_d402dad4387bd5::t_a898a05ce4a046 757-773,775-776,778,794-801
+  s_d402dad4387bd5::t_9d7fb629beebad 1036
+  s_d402dad4387bd5::t_266a393a6be393 41-54
+  s_d402dad4387bd5::t_2b9ee227cd644b 501
+mcp-bridge.js
+  s_d402dad4387bd5::t_ee237e5eb94ed5 604
+  s_d402dad4387bd5::t_038411e8c04e07 232-235
+  s_d402dad4387bd5::t_32cb44dbd2dc7c 248-259
+  s_d402dad4387bd5::t_251878f69ab8f0 622
+app.js
+  s_d402dad4387bd5::t_a232de09b83440 6627-6630,6634,6641
+  s_d402dad4387bd5::t_cdd92b8f192c22 6631-6633
+  s_d402dad4387bd5::t_c1b84e84cb68cb 7618-7620,7622-7626,7628-7633,7635-7636,7638-7644,7646-7652,7655-7657,7659-7676
+  s_d402dad4387bd5::t_15fa8a551c6c15 4576-4582
+  s_d402dad4387bd5::t_971ea4da506c4a 2485
+  s_d402dad4387bd5::t_3ec1e6180afc33 24,26
+  s_d402dad4387bd5::t_edfe5035063cf6 4559-4560
+  s_d402dad4387bd5::t_73c42604e6b4b9 607-633,636-693,695,697-698
+  s_d402dad4387bd5::t_f76906402e7de7 7599
+  s_d402dad4387bd5::t_660c4254c40ad3 8244
+  s_d402dad4387bd5::t_24fc87409bbc41 2145,2147
+  s_d402dad4387bd5::t_d2ce22d74126e1 7543
+.roadmap/config.json
+  s_d402dad4387bd5::t_ce9481a921e46e 155
+.roadmap/plans/015-port-upstream-prs-40-41-panorama-background-spanning-ipad-device-diff-check-against-our-37-based-fork-first.md
+  s_d402dad4387bd5::t_97ba03e09d72b6 6,23-32
+CHANGELOG.md
+  s_d402dad4387bd5::t_65c3cfe3a08b35 8
+ROADMAP.md
+  s_d402dad4387bd5::t_c2a2e9ca885264 31,34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "19f13668f885b55c610d54d13572c11dfcd8d5c9",
+  "prompts": {},
+  "sessions": {
+    "s_d402dad4387bd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c7f7b082-0641-4204-b9dd-1c8393860a4a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "DrMxrcy <drmxrcy@gmail.com>"
+    }
+  }
+}
